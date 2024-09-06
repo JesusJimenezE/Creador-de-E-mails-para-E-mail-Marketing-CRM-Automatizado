@@ -1,0 +1,26 @@
+* {
+    margin: 0px; /* Elimina todos los márgenes exteriores de todos los elementos */
+    padding: 0px; /* Elimina todos los rellenos interiores de todos los elementos */
+    font-family: calibri;/* Establece la fuente de texto a 'Calibri' para todos los elementos */
+}
+
+
+div.inicio { /* Le ponemos nombre a la clase de estilo para la pantalla inicio */
+    width: 100%; /* El div ocupará el 100% del ancho del contenedor */
+    margin: auto; /* Centra el div horizontalmente dentro de su contenedor (si el ancho del div es menor que el del contenedor) */ 
+    text-align: center; /* Centra el texto y los elementos horizontalmente dentro del div */
+}
+p {
+    
+    font-weight: bold; /* Hace que el texto dentro del div sea negrita */
+    font-size: 40px; /* Tamaño de fuente de 16 píxeles */
+}
+div.inicio from input.iniciars{
+    background-color:#1A2B61;
+    
+}
+
+
+
+
+
