@@ -1,23 +1,90 @@
+/* Estilos generales para todos los elementos */
 * {
-    margin: 0px; /* Elimina todos los márgenes exteriores de todos los elementos */
-    padding: 0px; /* Elimina todos los rellenos interiores de todos los elementos */
-    font-family: calibri;/* Establece la fuente de texto a 'Calibri' para todos los elementos */
+    margin: 0px;
+    /* Elimina todos los márgenes exteriores de todos los elementos */
+    padding: 0px;
+    /* Elimina todos los rellenos interiores de todos los elementos */
+    font-family: calibri;
+    /* Establece la fuente de texto a 'Calibri' para todos los elementos */
 }
 
-
-div.inicio { /* Le ponemos nombre a la clase de estilo para la pantalla inicio */
-    width: 100%; /* El div ocupará el 100% del ancho del contenedor */
-    margin: auto; /* Centra el div horizontalmente dentro de su contenedor (si el ancho del div es menor que el del contenedor) */ 
-    text-align: center; /* Centra el texto y los elementos horizontalmente dentro del div */
+/* Estilos específicos para el contenedor de inicio */
+div.inicio {
+    width: 100%;
+    /* El div ocupará el 100% del ancho del contenedor */
+    margin: auto;
+    /* Centra el div horizontalmente dentro de su contenedor (si el ancho del div es menor que el del contenedor) */
+    text-align: center;
+    /* Centra el texto y los elementos horizontalmente dentro del div */
 }
+
+/* Estilos para los elementos <p> (párrafos) */
 p {
-    
-    font-weight: bold; /* Hace que el texto dentro del div sea negrita */
-    font-size: 40px; /* Tamaño de fuente de 16 píxeles */
+    font-weight: bold;
+    /* Hace que el texto dentro del párrafo sea negrita */
+    font-size: 40px;
+    /* Tamaño de fuente de 40 píxeles */
 }
-div.inicio from input.iniciars{
-    background-color:#1A2B61;
-    
+
+/* Estilos para el fondo personalizado */
+.custom-bg {
+    background-color: #1A2B61;
+    /* Establece un color de fondo personalizado */
+}
+
+/* Estilos para el contenedor del formulario */
+div.formulario {
+    text-align: center;
+    width: 30%;
+    /* Establece el ancho del contenedor del formulario al 30% del contenedor padre */
+    position: relative;
+    /* Establece la posición relativa para permitir el posicionamiento absoluto de los elementos hijos */
+    padding: 20px;
+    /* Añade un relleno de 20 píxeles alrededor del contenido */
+    border-radius: 10px;
+    /* Aplica un radio de borde de 10 píxeles para bordes redondeados */
+    z-index: 1;
+    /* Asegura que el formulario esté por encima de la imagen de fondo */
+}
+
+/* Estilos para el contenedor del formulario y la imagen de fondo */
+.form-container {
+    position: relative;
+    width: 100%;
+    /* Ajusta el ancho del contenedor al 100% del contenedor padre */
+    height: 100vh;
+    /* Ajusta la altura del contenedor al 100% de la altura del viewport */
+    display: flex;
+    /* Utiliza flexbox para alinear el contenido */
+    justify-content: center;
+    /* Centra horizontalmente el contenido del contenedor */
+    align-items: center;
+    /* Centra verticalmente el contenido del contenedor */
+}
+
+/* Estilos para las etiquetas dentro del formulario */
+div.formulario form label {
+    color: white;
+    /* Establece el color del texto de las etiquetas a blanco */
+    font-weight: bold;
+    /* Hace que el texto de las etiquetas sea negrita */
+    font-size: 35px;
+    /* Tamaño de fuente de 35 píxeles */
+}
+
+/* Estilos para la imagen de fondo */
+.background-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    /* Ajusta el ancho de la imagen al 100% del contenedor padre */
+    height: 100%;
+    /* Ajusta la altura de la imagen al 100% del contenedor padre */
+    object-fit: cover;
+    /* Asegura que la imagen cubra el contenedor sin distorsión */
+    z-index: -1;
+    /* Envía la imagen al fondo, detrás del contenido del formulario */
 }
 
 
