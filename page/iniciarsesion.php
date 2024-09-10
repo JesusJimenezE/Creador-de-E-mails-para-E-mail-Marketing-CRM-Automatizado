@@ -41,6 +41,6 @@
     </div>
     
     <!-- Inclusión del pie de página común a todas las pantallas -->
-    <?php include "./../includes/footer.php" ?>
+    <?php include "./../includes/piepagina.php" ?>
 </body>
 </html>

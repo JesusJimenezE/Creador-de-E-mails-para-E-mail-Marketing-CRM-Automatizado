@@ -24,4 +24,4 @@
     </div>
 
 
-<?php include "./../includes/footer.php" ?><!-- Llamamos al piede pagina que estara en todas las pantalla -->
+<?php include "./../includes/piepagina.php" ?><!-- Llamamos al piede pagina que estara en todas las pantalla -->
