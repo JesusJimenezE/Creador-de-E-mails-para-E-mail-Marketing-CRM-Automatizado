@@ -18,7 +18,7 @@
 
          <!-- Botón de inicio de sesión estilizado con Bootstrap y una clase personalizada -->
         
-        <a href="./../page/iniciarsesion.php" class="btn btn-primary custom-bg">Iniciar sesión</a>
+        <a href="./../page/iniciarsesion.php" class="btn btn-primary ">Iniciar sesión</a>
 
 
     </div>
