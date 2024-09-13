@@ -1,7 +1,8 @@
 import React from 'react'
 
-export const contac = () => {
+export const Contac = () => {
   return (
-    <div>contac</div>
+    <div>Contac</div>
   )
 }
+
