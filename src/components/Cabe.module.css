@@ -1,12 +1,4 @@
-.logi{
-    position: relative; 
-    padding: 0px;
+.nave{
+    background-color: #1A2B61;
+    color:black;
 }
-
-.logi-image{
-    width: 100%;
-    max-width: 1400px;
-    height: auto;
-}
-
-
