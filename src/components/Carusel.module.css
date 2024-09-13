@@ -1,0 +1,11 @@
+.carousel-container {
+    width: 80%; /* Ajusta el ancho del carrusel */
+    max-width: 1200px; /* Ajusta el ancho máximo del carrusel */
+    margin: 0 auto; /* Centra el carrusel en su contenedor */
+  }
+  
+  .carousel-item img {
+    width: 100%; /* Hace que la imagen ocupe todo el ancho del carrusel */
+    height: auto; /* Mantiene la proporción de la imagen */
+  }
+  

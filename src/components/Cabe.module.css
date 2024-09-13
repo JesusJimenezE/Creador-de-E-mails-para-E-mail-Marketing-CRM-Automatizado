@@ -1,4 +1,14 @@
-.nave{
-    background-color: #1A2B61;
-    color:black;
+.nave {
+  background-color: #1A2B61;
+  padding: 1rem; /* Agrega un poco de espacio alrededor de la barra de navegación */
+}
+
+.nav-link {
+  color: #ffffff;   
+  text-decoration: none; /* Elimina el subrayado por defecto */
+  padding: 0.5rem 1rem; /* Agrega espacio alrededor del texto */
+}
+
+.nav-link:hover {
+  color: #007bff; 
 }

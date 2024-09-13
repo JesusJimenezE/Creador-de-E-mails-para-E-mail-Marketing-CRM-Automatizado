@@ -1,0 +1,11 @@
+.card-container {
+    display: flex;
+    gap: 1rem; /* Espacio entre los cards */
+    justify-content: center; /* Centra los cards horizontalmente */
+    flex-wrap: wrap; /* Permite que los cards se muevan a la siguiente línea si el espacio es insuficiente */
+  }
+  
+  .card {
+    width: 18rem; /* Ancho fijo para los cards */
+  }
+  

@@ -30,7 +30,7 @@ const Login = () => {
               <Input id="contrasena" name="contrasena" placeholder="Contraseña" type="password" />
             </FormGroup>
             <Button outline color="secondary" onClick={handleSubmit}>
-              Submit
+              Iniciar sesión
             </Button>
           </Form>
         </div>

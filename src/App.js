@@ -6,7 +6,10 @@ import inicabe from './assets/img/inicabe.png';
 import DENEDIG from './assets/img/DENEDIGico.png';
 import { Piep } from './components/Piep';
 import Login from './screens/Login'; 
-import Home from './screens/Home'; // Importa el componente Home
+import Home from './screens/Home'; 
+import Contac from './screens/Contac'; 
+import Email from './screens/Email'; 
+import Prefil from './screens/Prefil';
 
 function App() {
   const navigate = useNavigate(); 
@@ -35,7 +38,12 @@ function App() {
         }
       />
       <Route path="/login" element={<Login />} />
-      <Route path="/home" element={<Home />} /> {/* Añade la ruta para Home */}
+      <Route path="/home" element={<Home />} />
+      <Route path="/contac" element={<Contac />} />
+      <Route path="/email" element={<Email />} />
+      <Route path="/perfil" element={<Prefil />} />
+      <Route path="/app" element={<App />} />
+      
     </Routes>
   );
 }
