@@ -1,0 +1,35 @@
+/* Estilo para el contenedor del pie de página */
+.pie {
+    position: relative; /* Necesario para el posicionamiento absoluto de los íconos */
+    text-align: center;
+    padding: 0px;
+    
+}
+
+/* Estilo para la imagen del pie de página */
+.pie-image {
+    width: 100%;
+    max-width: 1400px;
+    height: auto;
+}
+
+/* Estilo para los íconos */
+.icon {
+    position: absolute;
+    font-size: 2rem; /* Tamaño de los íconos, ajusta según tu necesidad */
+    color: white; /* Color de los íconos, ajusta según tu necesidad */
+    text-decoration: none; /* Elimina el subrayado del enlace */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Estilo para el texto en la parte inferior derecha */
+.dere {
+    position: absolute;
+    bottom: 10px; /* Ajusta según tu necesidad */
+    left: 50%; /* Centro horizontalmente */
+    transform: translateX(-50%); /* Ajusta horizontalmente para centrar */
+    font-size: 0.8rem; /* Tamaño de la fuente más pequeño */
+    color: white; /* Color del texto, ajusta según tu necesidad */
+}
