@@ -25,7 +25,7 @@ export const Piep = () => {
             <a href="tel: 55 7389 5088" className={styles.icon} style={{ top: '40%', left: '83%' }}>
                 <FontAwesomeIcon icon={faPhone} />
             </a>
-            <div className={styles.dere}>
+            <div className={styles.dere} style={{ top: '55%', left: '75%' }}>
                 © Todos los derechos reservados © 2024 DENEDIG
             </div>
         </div>
