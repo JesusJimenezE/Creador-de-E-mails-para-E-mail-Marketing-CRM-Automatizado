@@ -1,0 +1,45 @@
+
+.EmailPage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.FormContainer {
+    background-color: #B3B8CA; 
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 500px; 
+    width: 100%; 
+    
+}
+
+.env {
+    background-color: #1A2B61;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.env:hover {
+    background-color: #45a049;
+}
+
+.lim {
+    background-color: #1A2B61;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.lim:hover {
+    background-color: #d32f2f;
+}
