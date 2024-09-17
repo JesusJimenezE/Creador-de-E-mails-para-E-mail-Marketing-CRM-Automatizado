@@ -10,16 +10,17 @@ import Home from './screens/Home';
 import Contac from './screens/Contac'; 
 import Email from './screens/Email'; 
 import Prefil from './screens/Prefil';
+import Nuecont from './screens/Nuecont'; 
 
 function App() {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleLoginClick = () => {
-    navigate('/login'); 
+    navigate('/login');
   };
 
   return (
-    <Routes> 
+    <Routes>
       <Route
         path="/"
         element={
@@ -42,9 +43,10 @@ function App() {
       <Route path="/contac" element={<Contac />} />
       <Route path="/email" element={<Email />} />
       <Route path="/perfil" element={<Prefil />} />
+      <Route path="/nuecont" element={<Nuecont />} /> 
       <Route path="/app" element={<App />} />
-      
     </Routes>
+      
   );
 }
 

@@ -14,7 +14,7 @@
     
 }
 
-.env {
+.guar {
     background-color: #1A2B61;
     color: white;
     border: none;
@@ -24,7 +24,7 @@
     transition: background-color 0.3s ease;
 } 
 
-.env:hover {
+.guar:hover {
     background-color: #45a049;
 }
 

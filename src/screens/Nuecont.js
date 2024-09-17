@@ -1,4 +1,9 @@
 import React from 'react'
+import { Cabe } from '../components/Cabe'; 
+import { Piep } from '../components/Piep';
+import { Button, Input, Label, Form, FormGroup } from 'reactstrap';
+import styles from './Nuecont.module.css'; 
+
 
 export const Nuecont = () => {
   return (
@@ -33,7 +38,7 @@ export const Nuecont = () => {
           </FormGroup>
 
           <FormGroup>
-            <Label for="conte">Numero:</Label>
+            <Label for="conte">Numero telefonico:</Label>
             <Input id="numeroc" name="numero" type="number" />
           </FormGroup>
 
@@ -42,7 +47,7 @@ export const Nuecont = () => {
               <Input id="dirrecion" name="text" type="textarea" />
             </FormGroup>
 
-            <Button className={styles.env}>Guardar</Button>
+            <Button className={styles.guar}>Guardar</Button>
             <Button className={styles.lim}>Limpiar</Button>
           </Form>
       </div>
@@ -52,3 +57,5 @@ export const Nuecont = () => {
     </div>
   )
 }
+
+export default Nuecont;

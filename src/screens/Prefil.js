@@ -23,7 +23,7 @@ export const Prefil = () => {
           </FormGroup>
 
           <FormGroup>
-            <Label for="conte">Numero:</Label>
+            <Label for="conte">Numero telefonico:</Label>
             <Input id="numero" name="numero" type="number" />
           </FormGroup>
 
