@@ -2,15 +2,15 @@ import React from 'react';
 import { Button, Input, Label, Form, FormGroup } from 'reactstrap';
 import { Cabe } from '../components/Cabe';
 import { Piep } from '../components/Piep';
-import styles from './Email.module.css'; // Importamos los estilos
+import styles from './Email.module.css'; 
 
 export const Email = () => {
   return (
     <div>
       <Cabe />
-    <div className={styles.EmailPage}> {/* Clase para centrar la página */}
+    <div className={styles.EmailPage}>
       
-        <div className={styles.FormContainer}> {/* Aplicamos la clase FormContainer aquí */}
+        <div className={styles.FormContainer}> 
           <Form>
             <FormGroup>
               <Label for="asunto">Asunto:</Label>

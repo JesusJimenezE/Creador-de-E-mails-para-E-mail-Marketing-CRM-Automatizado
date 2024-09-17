@@ -1,0 +1,10 @@
+.cons {
+    text-align: right; /* Alinea el botón a la derecha */
+  }
+  
+  .agre {
+    background-color: #1A2B61; /* Color de fondo personalizado */
+    color: white; /* Color del texto del botón */
+    border: none; /* Opcional: quita el borde predeterminado */
+  }
+  
