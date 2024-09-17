@@ -1,0 +1,28 @@
+
+.PrefPage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.FormContainer {
+    background-color: #B3B8CA; 
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 500px; 
+    width: 100%; 
+}
+
+.guar {
+    background-color: #1A2B61;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.guar:hover {
+    background-color: #45a049;
+}
