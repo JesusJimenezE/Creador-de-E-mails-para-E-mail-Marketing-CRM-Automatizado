@@ -16,7 +16,7 @@ export const Contac = () => {
   return (
     <div>
       <Cabe />
-      <div className={styles.cons}>
+      <div className={styles.cons}> 
         <Button className={styles.agre} onClick={handleButtonClick}>
           Agregar
         </Button>

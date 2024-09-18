@@ -9,3 +9,16 @@
     width: 18rem; /* Ancho fijo para los cards */
   }
   
+  .ver {
+    background-color: #1A2B61;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+} 
+
+.ver:hover {
+    background-color: #B3B8CA;
+}

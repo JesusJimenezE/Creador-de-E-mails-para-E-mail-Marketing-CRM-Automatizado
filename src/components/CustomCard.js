@@ -21,7 +21,7 @@ export const CustomCard = () => {
                     <CardText>
                         Alguna información del contacto
                     </CardText>
-                    <Button className={styles.regis} onClick={handleSubmit}>
+                    <Button className={styles.ver} onClick={handleSubmit}>
                         Ver mas
                     </Button>
                 </CardBody>
@@ -35,7 +35,7 @@ export const CustomCard = () => {
                     <CardText>
                         Alguna información del contacto
                     </CardText>
-                    <Button>
+                    <Button className={styles.ver} onClick={handleSubmit}>
                         Ver más
                     </Button>
                 </CardBody>
@@ -49,7 +49,7 @@ export const CustomCard = () => {
                     <CardText>
                         Alguna información del contacto
                     </CardText>
-                    <Button>
+                    <Button className={styles.ver} onClick={handleSubmit}>
                         Ver más
                     </Button>
                 </CardBody>
@@ -63,7 +63,7 @@ export const CustomCard = () => {
                     <CardText>
                         Alguna información del contacto
                     </CardText>
-                    <Button>
+                    <Button className={styles.ver} onClick={handleSubmit}>
                         Ver más
                     </Button>
                 </CardBody>
@@ -77,7 +77,7 @@ export const CustomCard = () => {
                     <CardText>
                         Alguna información del contacto
                     </CardText>
-                    <Button>
+                    <Button className={styles.ver} onClick={handleSubmit}>
                         Ver más
                     </Button>
                 </CardBody>
