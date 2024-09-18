@@ -12,6 +12,7 @@ import Email from './screens/Email';
 import Prefil from './screens/Prefil';
 import Nuecont from './screens/Nuecont'; 
 import Nuepre from './screens/Nuepre';
+import Infcont from './screens/Infcont';
 
 function App() {
   const navigate = useNavigate();
@@ -47,6 +48,7 @@ function App() {
       <Route path="/nuecont" element={<Nuecont />} /> 
       <Route path="/app" element={<App />} />
       <Route path="/nuepre" element={<Nuepre />} />
+      <Route path="/infcont" element={<Infcont />} />
     </Routes>
       
   );
