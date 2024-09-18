@@ -1,5 +1,4 @@
 import React from 'react'
-import { Cabe } from '../components/Cabe';
 import { Piep } from '../components/Piep';
 import { Button, Input, Label, Form, FormGroup } from 'reactstrap';
 import styles from './Nuecont.module.css';
@@ -8,8 +7,9 @@ import styles from './Nuecont.module.css';
 export const Nuepre = () => {
     return (
         <div>
-            <Cabe />
             <div className={styles.NueprPage}>
+
+
 
                 <div className={styles.FormContainer}>
                     <Form>

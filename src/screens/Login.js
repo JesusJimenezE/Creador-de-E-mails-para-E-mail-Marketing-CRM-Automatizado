@@ -13,6 +13,10 @@ const Login = () => {
     navigate('/home'); 
   };
 
+  const handleSubmit1 = () => {
+    navigate('/nuepre'); 
+  };
+
   return (
 
     <div className={styles.container}>
@@ -34,6 +38,9 @@ const Login = () => {
               Iniciar sesión
             </Button>
             
+            <Button outline color="secondary" onClick={handleSubmit1}>
+              Registrar
+            </Button>
           </Form>
         </div>
       </div>

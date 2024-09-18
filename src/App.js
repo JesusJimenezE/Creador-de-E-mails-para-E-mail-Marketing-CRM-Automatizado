@@ -11,6 +11,7 @@ import Contac from './screens/Contac';
 import Email from './screens/Email'; 
 import Prefil from './screens/Prefil';
 import Nuecont from './screens/Nuecont'; 
+import Nuepre from './screens/Nuepre';
 
 function App() {
   const navigate = useNavigate();
@@ -45,6 +46,7 @@ function App() {
       <Route path="/perfil" element={<Prefil />} />
       <Route path="/nuecont" element={<Nuecont />} /> 
       <Route path="/app" element={<App />} />
+      <Route path="/nuepre" element={<Nuepre />} />
     </Routes>
       
   );

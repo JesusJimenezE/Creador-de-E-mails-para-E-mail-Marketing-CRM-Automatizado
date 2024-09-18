@@ -3,7 +3,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100vh;
 }
+
 
 .FormContainer {
     background-color: #B3B8CA; 
