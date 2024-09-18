@@ -1,15 +1,22 @@
-import React from 'react'
+import React from 'react';
+import { useNavigate } from 'react-router-dom'; // Importa useNavigate
 import { Piep } from '../components/Piep';
 import { Button, Input, Label, Form, FormGroup } from 'reactstrap';
 import styles from './Nuecont.module.css';
-
+import DENEDIG from './../assets/img/DENEDIGico.png';
 
 export const Nuepre = () => {
+
+    const navigate = useNavigate(); // Usa el hook useNavigate
+
+    const handleSubmit = () => {
+        navigate('/login'); // Navega a la ruta '/login'
+    };
+
     return (
         <div>
             <div className={styles.NueprPage}>
-
-
+                <img src={DENEDIG} alt="Logo" className="logo-image" />
 
                 <div className={styles.FormContainer}>
                     <Form>
@@ -34,13 +41,16 @@ export const Nuepre = () => {
                         </FormGroup>
 
                         <Button className={styles.guar}>Agregar</Button>
+
+                        <Button outline color="secondary" onClick={handleSubmit}>
+                            Regresar
+                        </Button>
                     </Form>
                 </div>
-
             </div>
             <Piep />
         </div>
-    )
+    );
 }
 
 export default Nuepre;
