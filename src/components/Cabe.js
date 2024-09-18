@@ -5,8 +5,8 @@ import styles from './Cabe.module.css';
 import logo from './../assets/img/DENEDIGico.png';
 
 export const Cabe = () => {
-  return (
-    <div className={styles.headerContainer}>
+  return ( // usamos lo div para darle los diseños de la pagina en ciertas partes, por lo mismo le agregamos clases y estilos donde le ponemos el nombre de esa parte
+    <div className={styles.headerContainer}> 
       <div className={styles.nave}>
         <Nav className={styles.leftNav}>
           <NavItem>
