@@ -6,9 +6,9 @@ import logo from './../assets/img/DENEDIGico.png';
 
 export const Cabe = () => {
   return (
-    <div>
+    <div className={styles.headerContainer}>
       <div className={styles.nave}>
-        <Nav>
+        <Nav className={styles.leftNav}>
           <NavItem>
             <RouterNavLink to="/home" className={styles['nav-link']}>
               Inicio
@@ -24,6 +24,9 @@ export const Cabe = () => {
               E-mail
             </RouterNavLink>
           </NavItem>
+        </Nav>
+        
+        <div className={styles.rightNav}>
           <NavItem>
             <RouterNavLink to="/perfil" className={styles['nav-link']}>
               Perfil
@@ -34,7 +37,7 @@ export const Cabe = () => {
               Salir
             </RouterNavLink>
           </NavItem>
-        </Nav>
+        </div>
       </div>
       <div className={styles['logo-container']}>
         <img src={logo} alt="logo" className={styles['logo-image']} />
