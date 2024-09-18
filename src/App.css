@@ -2,20 +2,22 @@
   text-align: center;
   padding: 0px;
   font-weight: bold;
-  font-size: 30px;
+  font-size: 2rem; /* Usa unidades relativas para el tamaño del texto */
 }
 
 .header-image {
   width: 100%; /* Este es el ancho del contenedor */
-  max-width: 1400px; /* Este es el ancho maximo de esta imagen para que acomplete la parte superior */
+  max-width: 100%; /* Asegura que ocupe todo el ancho en dispositivos pequeños */
   height: auto; /* Mantiene la proporción de la imagen */
 }
 
 .logo-image {
-  width: 300px; /* Fija el ancho de la imagen del logo */
-  height: auto; /* Mantiene la proporción de la imagen */
+  width: 20vw; /* Usa el 20% del ancho de la ventana (vw) */
+  max-width: 300px; /* Máximo tamaño del logo */
+  height: auto;
 }
 
+/* Botón de inicio de sesión */
 .iniapp {
   background-color: #1A2B61;
   color: white;
@@ -25,4 +27,44 @@
   cursor: pointer;
   margin-left: 10px;
   transition: background-color 0.3s ease;
+  font-size: 1rem; /* Usa una unidad relativa */
+}
+
+/* Hover para botón */
+.iniapp:hover {
+  background-color: #45a049;
+}
+
+/* Media queries para pantallas pequeñas (tabletas y teléfonos) */
+@media (max-width: 768px) {
+  .App {
+    font-size: 1.5rem; /* Reduce el tamaño del texto */
+  }
+
+  .logo-image {
+    width: 40vw; /* Usa el 40% del ancho de la ventana en dispositivos medianos */
+    max-width: 200px; /* Ajusta el tamaño máximo del logo */
+  }
+
+  .iniapp {
+    font-size: 0.9rem; /* Ajusta el tamaño del botón */
+    padding: 8px 16px; /* Reduce el padding en botones */
+  }
+}
+
+/* Media queries para pantallas muy pequeñas (teléfonos pequeños) */
+@media (max-width: 480px) {
+  .App {
+    font-size: 1.2rem; /* Reduce aún más el tamaño del texto */
+  }
+
+  .logo-image {
+    width: 50vw; /* Usa el 50% del ancho de la ventana en teléfonos pequeños */
+    max-width: 150px; /* Ajusta el tamaño máximo del logo */
+  }
+
+  .iniapp {
+    font-size: 0.8rem;
+    padding: 6px 12px; /* Reduce el padding en botones aún más */
+  }
 }

@@ -2,34 +2,90 @@
 .pie {
     position: relative; /* Necesario para el posicionamiento absoluto de los íconos */
     text-align: center;
-    padding: 0px;
-    
+    padding: 0;
+    margin-top: 20px;
 }
 
 /* Estilo para la imagen del pie de página */
 .pie-image {
-    width: 100%;
-    max-width: 1400px;
+    width: 100%; /* Se ajusta al 100% del ancho del contenedor */
+    max-width: 1400px; /* Ancho máximo */
     height: auto;
 }
 
 /* Estilo para los íconos */
 .icon {
     position: absolute;
-    font-size: 2rem; /* Tamaño de los íconos, ajusta según tu necesidad */
-    color: white; /* Color de los íconos, ajusta según tu necesidad */
-    text-decoration: none; /* Elimina el subrayado del enlace */
+    font-size: 2rem; /* Tamaño de los íconos */
+    color: white;
+    text-decoration: none;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-/* Estilo para el texto en la parte inferior derecha */
+/* Estilo para el texto en la parte inferior */
 .dere {
     position: absolute;
-    bottom: 10px; /* Ajusta según tu necesidad */
-    left: 50%; /* Centro horizontalmente */
-    transform: translateX(-50%); /* Ajusta horizontalmente para centrar */
-    font-size: 0.8rem; /* Tamaño de la fuente más pequeño */
-    color: white; /* Color del texto, ajusta según tu necesidad */
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.8rem;
+    color: white;
+}
+
+/* Media queries para pantallas más pequeñas (teléfonos) */
+@media (max-width: 768px) {
+    .icon {
+        font-size: 1.5rem; /* Reduce el tamaño de los íconos en pantallas más pequeñas */
+    }
+
+    .dere {
+        font-size: 0.7rem; /* Reduce el tamaño del texto en pantallas más pequeñas */
+    }
+    
+    /* Ajusta las posiciones de los íconos para pantallas pequeñas */
+    .icon:nth-child(2) { /* Facebook */
+        left: 60%;
+    }
+    .icon:nth-child(3) { /* Instagram */
+        left: 65%;
+    }
+    .icon:nth-child(4) { /* YouTube */
+        left: 70%;
+    }
+    .icon:nth-child(5) { /* Google */
+        left: 75%;
+    }
+    .icon:nth-child(6) { /* Teléfono */
+        left: 80%;
+    }
+}
+
+/* Media queries para pantallas muy pequeñas (teléfonos pequeños) */
+@media (max-width: 480px) {
+    .icon {
+        font-size: 1.2rem; /* Reduce más el tamaño de los íconos */
+    }
+
+    .dere {
+        font-size: 0.6rem; /* Reduce aún más el tamaño del texto */
+    }
+
+    /* Ajusta las posiciones de los íconos para pantallas muy pequeñas */
+    .icon:nth-child(2) { /* Facebook */
+        left: 55%;
+    }
+    .icon:nth-child(3) { /* Instagram */
+        left: 60%;
+    }
+    .icon:nth-child(4) { /* YouTube */
+        left: 65%;
+    }
+    .icon:nth-child(5) { /* Google */
+        left: 70%;
+    }
+    .icon:nth-child(6) { /* Teléfono */
+        left: 75%;
+    }
 }
