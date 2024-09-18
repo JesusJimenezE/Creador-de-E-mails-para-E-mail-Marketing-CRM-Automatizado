@@ -34,11 +34,11 @@ const Login = () => {
             <FormGroup>
               <Input id="contrasena" name="contrasena" placeholder="Contraseña" type="password" />
             </FormGroup>
-            <Button outline color="secondary" onClick={handleSubmit}>
+            <Button className={styles.inic} onClick={handleSubmit}>
               Iniciar sesión
             </Button>
             
-            <Button outline color="secondary" onClick={handleSubmit1}>
+            <Button className={styles.regis} onClick={handleSubmit1}>
               Registrar
             </Button>
           </Form>

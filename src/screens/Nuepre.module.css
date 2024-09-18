@@ -1,11 +1,11 @@
 
+
+
 .NueprPage {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
 }
-
 
 .FormContainer {
     background-color: #B3B8CA; 
@@ -16,7 +16,7 @@
     
 }
 
-.guar {
+.agre {
     background-color: #1A2B61;
     color: white;
     border: none;
@@ -26,7 +26,21 @@
     transition: background-color 0.3s ease;
 } 
 
-.guar:hover {
+.agre:hover {
     background-color: #45a049;
 }
 
+.regr {
+    background-color: #1A2B61;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.regr:hover {
+    background-color: #d32f2f;
+}
