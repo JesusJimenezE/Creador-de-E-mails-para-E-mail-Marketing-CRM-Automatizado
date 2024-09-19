@@ -1,44 +1,42 @@
-
 .EmailPage {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: flex; /* Usamos flexbox para el contenedor principal */
+    justify-content: center; /* Centra el contenido horizontalmente */
+    align-items: center; /* Centra el contenido verticalmente */
 }
 
 .FormContainer {
-    background-color: #B3B8CA; 
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 500px; 
-    width: 100%; 
-    
+    background-color: #B3B8CA; /* Color de fondo del contenedor del formulario */
+    padding: 20px; /* Espaciado interno del contenedor */
+    border-radius: 10px; /* Bordes redondeados */
+    max-width: 500px; /* Ancho máximo del contenedor */
+    width: 100%; /* Ancho completo en pantallas pequeñas */
 }
 
 .env {
-    background-color: #1A2B61;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    background-color: #1A2B61; /* Color de fondo del botón "Enviar" */
+    color: white; /* Color del texto del botón */
+    border: none; /* Sin borde */
+    padding: 10px 20px; /* Espaciado interno del botón */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+    transition: background-color 0.3s ease; /* Transición suave para el cambio de color */
 } 
 
 .env:hover {
-    background-color: #45a049;
+    background-color: #45a049; /* Color de fondo al pasar el ratón sobre el botón "Enviar" */
 }
 
 .lim {
-    background-color: #1A2B61;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-left: 10px;
-    transition: background-color 0.3s ease;
+    background-color: #1A2B61; /* Color de fondo del botón "Limpiar" */
+    color: white; /* Color del texto del botón */
+    border: none; /* Sin borde */
+    padding: 10px 20px; /* Espaciado interno del botón */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+    margin-left: 10px; /* Margen izquierdo para separar de otros elementos */
+    transition: background-color 0.3s ease; /* Transición suave para el cambio de color */
 }
 
 .lim:hover {
-    background-color: #d32f2f;
+    background-color: #d32f2f; /* Color de fondo al pasar el ratón sobre el botón "Limpiar" */
 }
