@@ -1,35 +1,35 @@
 .nave {
-  background-color: #1A2B61;
-  padding: 1rem;
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
+  background-color: #1A2B61; /* Color de fondo del menú de navegación */
+  padding: 1rem; /* Espaciado interno del contenedor de navegación */
+  display: flex; /* Usamos flexbox para alinear los elementos horizontalmente */
+  justify-content: space-between; /* Distribuimos los elementos con espacio entre ellos */
+  align-items: center; /* Centramos los elementos verticalmente dentro del contenedor */
 }
 
 .leftNav {
-  display: flex;
-  gap: 1rem; 
+  display: flex; /* Usamos flexbox para alinear los enlaces del lado izquierdo */
+  gap: 1rem; /* Añadimos un espacio entre cada enlace */
 }
 
 .rightNav {
-  display: flex;
-  gap: 1rem; 
+  display: flex; /* Usamos flexbox para alinear los enlaces del lado derecho */
+  gap: 1rem; /* Añadimos un espacio entre cada enlace */
 }
 
 .nav-link {
-  color: #ffffff;
-  text-decoration: none;
-  padding: 0.5rem 1rem;
+  color: #ffffff; /* Color del texto de los enlaces */
+  text-decoration: none; /* Eliminamos el subrayado predeterminado de los enlaces */
+  padding: 0.5rem 1rem; /* Espaciado interno en los enlaces para hacerlo más clicable */
 }
 
 .nav-link:hover {
-  color: #007bff;
+  color: #007bff; /* Color del texto al pasar el cursor por encima del enlace */
 }
 
 .logo-container {
-  padding-left: 1rem;
+  padding-left: 1rem; /* Añadimos espacio a la izquierda del logo */
 }
 
 .logo-image {
-  max-width: 150px; 
+  max-width: 150px; /* Limita el tamaño máximo del logo para mantenerlo proporcional */
 }
