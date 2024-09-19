@@ -1,64 +1,51 @@
-
-
 .logo-container {
-    display: flex;
-    justify-content: center; 
-    margin-bottom: 20px; 
+    display: flex; /* Utiliza flexbox para alinear elementos */
+    justify-content: center; /* Centra el contenido horizontalmente */
+    margin-bottom: 20px; /* Espacio inferior */
 }
 
 .logo-image {
-    max-width: 100%; 
-    height: auto; 
+    max-width: 100%; /* Ajusta el logo al 100% del ancho del contenedor */
+    height: auto; /* Mantiene la proporción del logo */
 }
 
 .logi {
-    position: relative; 
-    width: 100%; 
-    margin: 0 auto; 
-    text-align: center; 
+    position: relative; /* Permite posicionar elementos hijos */
+    width: 100%; /* Ancho completo */
+    margin: 0 auto; /* Centra el contenedor */
+    text-align: center; /* Alinea el texto al centro */
 }
-
 
 .logi-image {
-    width: 100%; 
-    max-width: 3000px; 
-    height: auto; 
-    margin-bottom: 20px; 
+    width: 100%; /* Ancho completo de la imagen de fondo */
+    max-width: 3000px; /* Ancho máximo para evitar que se estire demasiado */
+    height: auto; /* Mantiene la proporción de la imagen */
+    margin-bottom: 20px; /* Espacio inferior */
 }
-
 
 .form-container {
-    font-size: 30px;
-    position: absolute; 
-    top: 50%;
-    left: 50%; 
-    color: white;
-    transform: translate(-50%, -50%); 
-    padding: 20px; 
-    width: 80%; 
-    max-width: 400px; 
+    font-size: 30px; /* Tamaño de fuente del formulario */
+    position: absolute; /* Permite posicionar el formulario en relación con el contenedor padre */
+    top: 50%; /* Coloca el formulario a la mitad del contenedor */
+    left: 50%; /* Coloca el formulario a la mitad del contenedor */
+    color: white; /* Color del texto */
+    transform: translate(-50%, -50%); /* Centra el formulario en ambas direcciones */
+    padding: 20px; /* Espaciado interno del formulario */
+    width: 80%; /* Ancho del formulario */
+    max-width: 400px; /* Ancho máximo del formulario */
 }
 
-.inic {
-    background-color: #1A2B61;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-left: 10px;
-    transition: background-color 0.3s ease;
+.inic, .regis {
+    background-color: #1A2B61; /* Color de fondo del botón */
+    color: white; /* Color del texto del botón */
+    border: none; /* Sin borde */
+    padding: 10px 20px; /* Espaciado interno */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+    margin-left: 10px; /* Espacio a la izquierda */
+    transition: background-color 0.3s ease; /* Transición suave para el cambio de color */
 }
 
-.regis {
-    background-color: #1A2B61;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-left: 10px;
-    transition: background-color 0.3s ease;
+.inic:hover, .regis:hover {
+    background-color: #45a049; /* Cambia el color de fondo al pasar el mouse (se puede ajustar para cada botón) */
 }
-
-
