@@ -1,61 +1,55 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Piep } from '../components/Piep';
-import { Button, Input, Label, Form, FormGroup } from 'reactstrap';
-import styles from './Nuepre.module.css';
-import DENEDIG from './../assets/img/DENEDIGico.png';
+import { useNavigate } from 'react-router-dom'; // Importa useNavigate para manejar la navegación
+import { Piep } from '../components/Piep'; // Importa el componente Piep
+import { Button, Input, Label, Form, FormGroup } from 'reactstrap'; // Importa componentes de Reactstrap
+import styles from './Nuepre.module.css'; // Importa estilos CSS específicos del componente
+import DENEDIG from './../assets/img/DENEDIGico.png'; // Importa la imagen del logo
 
 export const Nuepre = () => {
+    const navigate = useNavigate(); // Inicializa useNavigate para redirigir
 
-    const navigate = useNavigate();
-
+    // Maneja el evento de envío del formulario
     const handleSubmit = () => {
-        navigate('/login');
+        navigate('/login'); // Redirige a la página de inicio de sesión
     };
 
     return (
         <div>
+            <img src={DENEDIG} alt="Logo" className="logo-image" /> {/* Muestra el logo */}
 
-            <img src={DENEDIG} alt="Logo" className="logo-image" />
-
-            <div className={styles.NueprPage}>
-
-
-
-
-                <div className={styles.FormContainer}>
+            <div className={styles.NueprPage}> {/* Contenedor principal del formulario */}
+                <div className={styles.FormContainer}> {/* Contenedor para el formulario */}
                     <Form>
                         <FormGroup>
-                            <Label for="asunto">Nombre:</Label>
-                            <Input id="nombrep" name="nombre" type="text" />
+                            <Label for="nombrep">Nombre:</Label> {/* Etiqueta para el campo de nombre */}
+                            <Input id="nombrep" name="nombre" type="text" required /> {/* Campo de texto para el nombre */}
                         </FormGroup>
 
                         <FormGroup>
-                            <Label for="conte">Correo:</Label>
-                            <Input id="correop" name="correo" type="email" />
+                            <Label for="correop">Correo:</Label> {/* Etiqueta para el campo de correo */}
+                            <Input id="correop" name="correo" type="email" required /> {/* Campo de entrada para el correo */}
                         </FormGroup>
 
                         <FormGroup>
-                            <Label for="conte">Numero telefonico:</Label>
-                            <Input id="numerop" name="numero" type="number" />
+                            <Label for="numerop">Número telefónico:</Label> {/* Etiqueta para el campo de número telefónico */}
+                            <Input id="numerop" name="numero" type="tel" required /> {/* Campo para el número de teléfono */}
                         </FormGroup>
 
                         <FormGroup>
-                            <Label for="conte">Contraseña:</Label>
-                            <Input id="contrasena" name="contrasena" type="password" />
+                            <Label for="contrasena">Contraseña:</Label> {/* Etiqueta para el campo de contraseña */}
+                            <Input id="contrasena" name="contrasena" type="password" required /> {/* Campo de entrada para la contraseña */}
                         </FormGroup>
 
-                        <Button className={styles.agre}>Agregar</Button>
-
-                        <Button className={styles.regr} onClick={handleSubmit}>
+                        <Button className={styles.agre}>Agregar</Button> {/* Botón para agregar */}
+                        <Button className={styles.regr} onClick={handleSubmit}> {/* Botón para regresar */}
                             Regresar
                         </Button>
                     </Form>
                 </div>
             </div>
-            <Piep />
+            <Piep /> {/* Componente de pie de página */}
         </div>
     );
 }
 
-export default Nuepre;
+export default Nuepre; // Exporta el componente para su uso en otras partes de la aplicación
