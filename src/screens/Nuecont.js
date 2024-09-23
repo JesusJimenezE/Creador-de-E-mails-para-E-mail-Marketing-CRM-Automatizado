@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Cabe } from '../components/Cabe'; 
 import { Piep } from '../components/Piep';
 import { Button, Input, Label, Form, FormGroup } from 'reactstrap';
 import styles from './Nuecont.module.css'; 
+import { useFirebaseApp } from 'reactfire';
 
 export const Nuecont = () => {
   return (

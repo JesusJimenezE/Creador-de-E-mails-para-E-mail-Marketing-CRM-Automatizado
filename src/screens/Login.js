@@ -18,7 +18,8 @@ const Login = () => {
   const navigate = useNavigate(); // Creamos una instancia de useNavigate
 
   // Función para redirigir a la página de inicio
-  const handleSubmit = () => {
+  const login = async () => {
+    await firebase.auth().signInWitheEmailAndPassword(email,password)
     navigate('/home'); 
   };
 
@@ -43,7 +44,7 @@ const Login = () => {
             <FormGroup>
               <Input id="password" name="password" placeholder="Contraseña" type="password" onChange={ (ev)=> setPassword(ev.target.value)} /> {/* Campo para la contraseña */}
             </FormGroup>
-            <Button className={styles.inic} onClick={handleSubmit}> {/* Botón para iniciar sesión */}
+            <Button className={styles.inic} onClick={login}> {/* Botón para iniciar sesión */}
               Iniciar sesión
             </Button>
             
