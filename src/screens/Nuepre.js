@@ -4,6 +4,7 @@ import { Piep } from '../components/Piep'; // Importa el componente Piep
 import { Button, Input, Label, Form, FormGroup } from 'reactstrap'; // Importa componentes de Reactstrap
 import styles from './Nuepre.module.css'; // Importa estilos CSS específicos del componente
 import DENEDIG from './../assets/img/DENEDIGico.png'; // Importa la imagen del logo
+import { useFirebaseApp } from 'reactfire';
 
 export const Nuepre = () => {
     const navigate = useNavigate(); // Inicializa useNavigate para redirigir

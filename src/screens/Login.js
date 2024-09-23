@@ -5,8 +5,13 @@ import styles from './Login.module.css'; // Importamos estilos específicos para
 import logo from './../assets/img/DENEDIGico.png'; // Importamos el logo
 import logi from './../assets/img/fonlogi.png'; // Importamos la imagen de fondo del login
 import { Piep } from '../components/Piep'; // Importamos el componente del pie de página
+import { useFirebaseApp } from 'reactfire'; 
 
 const Login = () => {
+
+  const firebase = useFirebaseApp();
+  console.log(firebase);
+
   const navigate = useNavigate(); // Creamos una instancia de useNavigate
 
   // Función para redirigir a la página de inicio

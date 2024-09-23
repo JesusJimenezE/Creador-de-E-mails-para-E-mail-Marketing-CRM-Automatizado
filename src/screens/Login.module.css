@@ -46,6 +46,10 @@
     transition: background-color 0.3s ease; /* Transición suave para el cambio de color */
 }
 
-.inic:hover, .regis:hover {
+.inic:hover {
     background-color: #45a049; /* Cambia el color de fondo al pasar el mouse (se puede ajustar para cada botón) */
+}
+
+.regis:hover{
+    background-color:aqua;
 }
