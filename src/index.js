@@ -5,16 +5,16 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { firebaseappProvider } from 'reactfire'
-import fireBaseConfig from './components/firebaseconfig'
+import { FirebaseAppProvider } from 'reactfire'; // Cambia a FirebaseAppProvider con mayúscula
+import fireBaseConfig from './components/firebaseconfig';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Router>
-      <firebaseappProvider fireBaseConfig={}>
+      <FirebaseAppProvider firebaseConfig={fireBaseConfig}> {/* Capitalización corregida */}
         <App />
-      </firebaseappProvider>
+      </FirebaseAppProvider>
     </Router>
   </React.StrictMode>
 );
