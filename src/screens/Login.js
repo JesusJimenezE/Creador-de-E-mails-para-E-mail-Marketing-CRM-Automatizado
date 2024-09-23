@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Input, Label, Form, FormGroup } from 'reactstrap'; // Importamos componentes de Reactstrap para el formulario
 import { useNavigate } from 'react-router-dom'; // Importamos useNavigate para la navegación
 import styles from './Login.module.css'; // Importamos estilos específicos para esta página
 import logo from './../assets/img/DENEDIGico.png'; // Importamos el logo
 import logi from './../assets/img/fonlogi.png'; // Importamos la imagen de fondo del login
 import { Piep } from '../components/Piep'; // Importamos el componente del pie de página
-import { useFirebaseApp } from 'reactfire'; 
+import { useFirebaseApp } from 'reactfire';
 
 const Login = () => {
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const firebase = useFirebaseApp();
   console.log(firebase);
@@ -35,10 +38,10 @@ const Login = () => {
           <Form>
             <Label for="ini">Iniciar sesión</Label> {/* Título del formulario */}
             <FormGroup>
-              <Input id="email" name="email" placeholder="Email:" type="email" /> {/* Campo para el correo electrónico */}
+              <Input id="email" name="email" placeholder="Email:" type="email" onChange={ (ev)=> setEmail(ev.target.value)} /> {/* Campo para el correo electrónico */}
             </FormGroup>
             <FormGroup>
-              <Input id="contrasena" name="contrasena" placeholder="Contraseña" type="password" /> {/* Campo para la contraseña */}
+              <Input id="password" name="password" placeholder="Contraseña" type="password" onChange={ (ev)=> setPassword(ev.target.value)} /> {/* Campo para la contraseña */}
             </FormGroup>
             <Button className={styles.inic} onClick={handleSubmit}> {/* Botón para iniciar sesión */}
               Iniciar sesión
