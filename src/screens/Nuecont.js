@@ -3,8 +3,19 @@ import { Cabe } from '../components/Cabe';
 import { Piep } from '../components/Piep';
 import { Button, Input, Label, Form, FormGroup } from 'reactstrap';
 import styles from './Nuecont.module.css'; 
+import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, getDoc, setDoc } from 'firebase/firestore'
 
 export const Nuecont = () => {
+
+  const valorInicial = {
+    nombre: '',
+    edad: '',
+    genero: '',
+    correo: '',
+    numero: '',
+    dirrecion: ''
+  }
+
   return (
     <div>
       <Cabe /> {/* Componente de cabecera */}

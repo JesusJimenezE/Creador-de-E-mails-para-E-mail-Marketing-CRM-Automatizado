@@ -5,7 +5,7 @@ import styles from './Login.module.css'; // Importamos estilos específicos para
 import logo from './../assets/img/DENEDIGico.png'; // Importamos el logo
 import logi from './../assets/img/fonlogi.png'; // Importamos la imagen de fondo del login
 import { Piep } from '../components/Piep'; // Importamos el componente del pie de página
-
+ 
 // Importa Firebase y los métodos específicos
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
