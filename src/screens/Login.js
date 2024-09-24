@@ -5,22 +5,31 @@ import styles from './Login.module.css'; // Importamos estilos específicos para
 import logo from './../assets/img/DENEDIGico.png'; // Importamos el logo
 import logi from './../assets/img/fonlogi.png'; // Importamos la imagen de fondo del login
 import { Piep } from '../components/Piep'; // Importamos el componente del pie de página
-import { useFirebaseApp } from 'reactfire';
+
+// Importa Firebase y los métodos específicos
+import { initializeApp } from 'firebase/app';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+
+// Importa la configuración de Firebase desde firebaseconfig.js
+import firebaseConfig from '../components/firebaseconfig';
+
+// Inicializa Firebase con la configuración externa
+const app = initializeApp(firebaseConfig);
 
 const Login = () => {
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const firebase = useFirebaseApp();
-  console.log(firebase);
-
   const navigate = useNavigate(); // Creamos una instancia de useNavigate
+  const auth = getAuth(app); // Obtenemos la instancia de autenticación
 
-  // Función para redirigir a la página de inicio
+  // Función para iniciar sesión
   const login = async () => {
-    await firebase.auth().signInWitheEmailAndPassword(email,password)
-    navigate('/home'); 
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      navigate('/home'); // Redirigir a la página de inicio si la autenticación es exitosa
+    } catch (error) {
+      console.error("Error al iniciar sesión:", error);
+    }
   };
 
   // Función para redirigir a la página de registro
@@ -47,7 +56,6 @@ const Login = () => {
             <Button className={styles.inic} onClick={login}> {/* Botón para iniciar sesión */}
               Iniciar sesión
             </Button>
-            
             <Button className={styles.regis} onClick={handleSubmit1}> {/* Botón para registrar */}
               Registrar
             </Button>
@@ -59,5 +67,4 @@ const Login = () => {
   );
 };
 
-export default Login; // Exportamos el componente como predeterminado
-
+export default Login;
