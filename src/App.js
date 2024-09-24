@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'reactstrap'; // Importamos el componente Button de Reactstrap para usar botones con estilo
 import { Routes, Route, useNavigate } from 'react-router-dom'; // Importamos las herramientas de navegación y manejo de rutas
-import './App.css'; // Importamos los estilos de la aplicación
+import styles from './App.css'; // Importamos los estilos de la aplicación
 import inicabe from './assets/img/inicabe.png'; // Imagen para la parte superior
 import DENEDIG from './assets/img/DENEDIGico.png'; // Logo de DENEDIG
 import { Piep } from './components/Piep'; // Importamos el componente del pie de página
@@ -41,7 +41,7 @@ function App() {
             <div>"DENEDIG SAD de CV"</div>
             <div>
               {/* Botón para iniciar sesión */}
-              <Button color="primary" onClick={handleLoginClick}>Iniciar sesión</Button>
+              <Button className={styles.iniapp} onClick={handleLoginClick}>Iniciar sesión</Button>
             </div>
             {/* Componente del pie de página */}
             <Piep />
