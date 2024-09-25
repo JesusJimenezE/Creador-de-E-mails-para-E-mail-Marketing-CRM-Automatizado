@@ -3,10 +3,12 @@ import { Cabe } from '../components/Cabe';
 import { Piep } from '../components/Piep';
 import { Button, Input, Label, Form, FormGroup } from 'reactstrap';
 import styles from './Nuecont.module.css';
-import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, getDoc, setDoc } from 'firebase/firestore'
+import { db } from '../components/firebaseconfig';  // Importa `db` desde firebaseconfig
+
+import { collection, addDoc } from 'firebase/firestore';  // Importa solo lo necesario de Firestore
 
 export const Nuecont = () => {
-
+  // Valor inicial del formulario
   const valorInicial = {
     nombre: '',
     edad: '',
@@ -14,20 +16,32 @@ export const Nuecont = () => {
     correo: '',
     numero: '',
     direccion: ''
-  }
+  };
 
-  const [user, setUser] = useState(valorInicial)
+  // Estado para los valores del formulario
+  const [user, setUser] = useState(valorInicial);
 
+  // Función para capturar los inputs
   const capturarInputs = (e) => {
     const { name, value } = e.target;
-    setUser({ ...user, [name]: value })
-  }
+    setUser({ ...user, [name]: value });
+  };
 
+  // Función para guardar los datos en Firestore
   const guardarDatos = async (e) => {
     e.preventDefault();
-    console.log(user)
-    setUser({ ...valorInicial })
-  }
+    try {
+      await addDoc(collection(db, 'contactos'), {
+        ...user
+      });
+      console.log("Datos guardados correctamente");
+    } catch (error) {
+      console.error("Error al guardar los datos:", error);
+    }
+
+    // Resetear el formulario
+    setUser({ ...valorInicial });
+  };
 
   return (
     <div>
@@ -78,8 +92,8 @@ export const Nuecont = () => {
             </FormGroup>
 
             {/* Botones para guardar y limpiar */}
-            <Button className={styles.guar}>Guardar</Button>
-            <Button className={styles.lim}>Limpiar</Button>
+            <Button className={styles.guar} type="submit">Guardar</Button>
+            <Button className={styles.lim} type="button" onClick={() => setUser({ ...valorInicial })}>Limpiar</Button>
           </Form>
         </div>
       </div>
@@ -87,6 +101,6 @@ export const Nuecont = () => {
       <Piep /> {/* Componente de pie de página */}
     </div>
   );
-}
+};
 
 export default Nuecont;

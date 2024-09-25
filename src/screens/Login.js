@@ -7,20 +7,16 @@ import logi from './../assets/img/fonlogi.png'; // Importamos la imagen de fondo
 import { Piep } from '../components/Piep'; // Importamos el componente del pie de página
  
 // Importa Firebase y los métodos específicos
-import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 // Importa la configuración de Firebase desde firebaseconfig.js
-import firebaseConfig from '../components/firebaseconfig';
-
-// Inicializa Firebase con la configuración externa
-const app = initializeApp(firebaseConfig);
+import { appFirebase } from '../components/firebaseconfig'; // Correcto
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate(); // Creamos una instancia de useNavigate
-  const auth = getAuth(app); // Obtenemos la instancia de autenticación
+  const auth = getAuth(appFirebase); // Usamos appFirebase para obtener la instancia de autenticación
 
   // Función para iniciar sesión
   const login = async () => {
