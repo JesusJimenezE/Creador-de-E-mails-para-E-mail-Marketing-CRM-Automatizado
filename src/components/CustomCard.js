@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react'; // Importa React y hooks
 import { Card as ReactstrapCard, CardBody, CardTitle, CardText, Button } from 'reactstrap'; // Importa los componentes de Reactstrap
 import styles from './CustomCard.module.css'; // Importa el archivo de estilos personalizados
-import { useNavigate } from 'react-router-dom'; // Hook para la navegación
 import { db } from '../components/firebaseconfig'; // Importa la instancia de Firestore
-import { collection, getDocs } from 'firebase/firestore'; // Importa las funciones necesarias de Firestore
+import { collection, getDocs, doc, deleteDoc } from 'firebase/firestore'; // Importa las funciones necesarias de Firestore
 
 export const CustomCard = () => {
     const [contactos, setContactos] = useState([]); // Estado para almacenar los datos de los contactos
-    const navigate = useNavigate(); // Hook `useNavigate` para redirigir
 
     // useEffect para cargar los datos de la colección al montar el componente
     useEffect(() => {
@@ -24,9 +22,19 @@ export const CustomCard = () => {
         cargarContactos(); // Ejecuta la función para cargar los datos
     }, []);
 
-    // Función para manejar la navegación al hacer clic en "Ver más"
-    const handleSubmit = (id) => {
-        navigate(`/infcont/${id}`); // Navega a la página de información de contacto y pasa el id del contacto
+    // Función para eliminar un contacto de Firestore
+    const handleDelete = async (id) => {
+        try {
+            // Elimina el documento de la colección 'contactos' en Firestore
+            await deleteDoc(doc(db, 'contactos', id));
+
+            // Filtra el contacto eliminado de la lista actual de contactos
+            setContactos(contactos.filter((contacto) => contacto.id !== id));
+
+            console.log('Contacto eliminado exitosamente');
+        } catch (error) {
+            console.error('Error al eliminar el contacto: ', error);
+        }
     };
 
     return (
@@ -42,10 +50,12 @@ export const CustomCard = () => {
                             <strong>Correo:</strong> {contacto.correo}<br />
                             <strong>Número:</strong> {contacto.numero}<br />
                             <strong>Dirección:</strong> {contacto.direccion}
-                        </CardText> {/* Muestra el resto de la información del contacto */}
-                        <Button className={styles.eliminar} onClick={() => handleSubmit(contacto.id)}> {/* Botón "Ver más" */}
+                        </CardText> 
+        
+                        <Button className={styles.eliminar} onClick={() => handleDelete(contacto.id)}> {/* Botón "Eliminar" */}
                             Eliminar
                         </Button>
+
                     </CardBody>
                 </ReactstrapCard>
             ))}
