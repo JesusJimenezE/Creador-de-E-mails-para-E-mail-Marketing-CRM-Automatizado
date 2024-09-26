@@ -9,7 +9,7 @@
   width: 18rem; /* Ancho fijo para los cards, para mantener consistencia en el diseño */
 }
 
-.ver {
+.eliminar {
   background-color: #1A2B61; /* Color de fondo del botón */
   color: white; /* Color del texto del botón */
   border: none; /* Eliminamos cualquier borde predeterminado */
@@ -19,6 +19,6 @@
   transition: background-color 0.3s ease; /* Transición suave al cambiar el color de fondo */
 } 
 
-.ver:hover {
-  background-color: #B3B8CA; /* Color de fondo cuando el usuario pasa el cursor sobre el botón */
+.eliminar:hover {
+  background-color: #d32f2f; /* Color de fondo cuando el usuario pasa el cursor sobre el botón */
 }

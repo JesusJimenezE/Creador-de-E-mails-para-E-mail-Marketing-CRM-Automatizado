@@ -91,7 +91,7 @@ export const Nuecont = () => {
               <Input id="direccion" name="direccion" type="textarea" onChange={capturarInputs} value={user.direccion} />
             </FormGroup>
 
-            {/* Botones para guardar y limpiar */}
+            {/* Botones para guardar */}
             <Button className={styles.guar} type="submit">Guardar</Button>
             <Button className={styles.lim} type="button" onClick={() => setUser({ ...valorInicial })}>Limpiar</Button>
           </Form>

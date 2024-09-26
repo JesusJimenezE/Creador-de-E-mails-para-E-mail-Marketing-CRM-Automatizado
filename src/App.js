@@ -12,7 +12,6 @@ import Email from './screens/Email'; // Pantalla de E-mail
 import Prefil from './screens/Prefil'; // Pantalla del perfil
 import Nuecont from './screens/Nuecont'; // Pantalla para agregar nuevo contacto
 import Nuepre from './screens/Nuepre'; // Pantalla para agregar nuevo perfil
-import Infcont from './screens/Infcont'; // Pantalla con información del contacto
 
 function App() {
   const navigate = useNavigate(); // Hook para la navegación entre páginas
@@ -58,7 +57,6 @@ function App() {
       <Route path="/nuecont" element={<Nuecont />} /> {/* Ruta para la pantalla de nuevo contacto */}
       <Route path="/app" element={<App />} /> {/* Ruta para volver a la app */}
       <Route path="/nuepre" element={<Nuepre />} /> {/* Ruta para la pantalla de nuevo perfil */}
-      <Route path="/infcont" element={<Infcont />} /> {/* Ruta para la información de contacto */}
     </Routes>
   );
 }
