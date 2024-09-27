@@ -13,7 +13,7 @@ const handleLogout = () =>{
   const auth =  getAuth();
   signOut(auth)
   .then(()=>{
-    navigate('./../screens/Login.js');
+    navigate('/app');
   })
   .catch((error)=>{
     console.error('Error al cerrar sesión:', error)
