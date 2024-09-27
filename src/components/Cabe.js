@@ -13,7 +13,7 @@ const handleLogout = () =>{
   const auth =  getAuth();
   signOut(auth)
   .then(()=>{
-    navigate('/app');
+    navigate('/login');
   })
   .catch((error)=>{
     console.error('Error al cerrar sesión:', error)
@@ -53,7 +53,7 @@ const handleLogout = () =>{
             </RouterNavLink>
           </NavItem>
           <NavItem>
-            <span to="/app" className={styles['nav-link']} onClick={handleLogout} style={{ cursor: 'pointer' }}>
+            <span to="/login" className={styles['nav-link']} onClick={handleLogout} style={{ cursor: 'pointer' }}>
               Salir
             </span>
           </NavItem>

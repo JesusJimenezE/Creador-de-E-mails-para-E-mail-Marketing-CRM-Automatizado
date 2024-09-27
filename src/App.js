@@ -12,6 +12,7 @@ import Email from './screens/Email'; // Pantalla de E-mail
 import Prefil from './screens/Prefil'; // Pantalla del perfil
 import Nuecont from './screens/Nuecont'; // Pantalla para agregar nuevo contacto
 import Nuepre from './screens/Nuepre'; // Pantalla para agregar nuevo perfil
+import PrivateRoute from './components/PrivateRoute'; // Componente de protección de rutas
 
 function App() {
   const navigate = useNavigate(); // Hook para la navegación entre páginas
@@ -22,7 +23,6 @@ function App() {
   };
 
   return (
-    // Definimos las rutas de la aplicación
     <Routes>
       {/* Ruta para la página principal (home) */}
       <Route
@@ -48,18 +48,44 @@ function App() {
         }
       />
       
-      {/* Definimos las rutas para las diferentes páginas */}
-      <Route path="/login" element={<Login />} /> {/* Ruta para la pantalla de login */}
-      <Route path="/home" element={<Home />} /> {/* Ruta para la pantalla de inicio */}
-      <Route path="/contac" element={<Contac />} /> {/* Ruta para la pantalla de contactos */}
-      <Route path="/email" element={<Email />} /> {/* Ruta para la pantalla de emails */}
-      <Route path="/perfil" element={<Prefil />} /> {/* Ruta para la pantalla de perfil */}
-      <Route path="/nuecont" element={<Nuecont />} /> {/* Ruta para la pantalla de nuevo contacto */}
-      <Route path="/app" element={<App />} /> {/* Ruta para volver a la app */}
-      <Route path="/nuepre" element={<Nuepre />} /> {/* Ruta para la pantalla de nuevo perfil */}
+      {/* Ruta para la pantalla de login */}
+      <Route path="/login" element={<Login />} /> 
+      
+      {/* Rutas protegidas por autenticación */}
+      <Route path="/home" element={
+        <PrivateRoute>
+          <Home />
+        </PrivateRoute>
+      } />
+      <Route path="/contac" element={
+        <PrivateRoute>
+          <Contac />
+        </PrivateRoute>
+      } />
+      <Route path="/email" element={
+        <PrivateRoute>
+          <Email />
+        </PrivateRoute>
+      } />
+      <Route path="/perfil" element={
+        <PrivateRoute>
+          <Prefil />
+        </PrivateRoute>
+      } />
+      <Route path="/nuecont" element={
+        <PrivateRoute>
+          <Nuecont />
+        </PrivateRoute>
+      } />
+      <Route path="/nuepre" element={
+        <PrivateRoute>
+          <Nuepre />
+        </PrivateRoute>
+      } />
     </Routes>
+
+    
   );
 }
 
-export default App; // Exportamos el componente App como predeterminado
-
+export default App;
