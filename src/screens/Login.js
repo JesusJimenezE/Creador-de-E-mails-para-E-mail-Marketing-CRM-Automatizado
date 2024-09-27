@@ -44,7 +44,7 @@ const Login = () => {
           <Form>
             <Label for="ini">Iniciar sesión</Label> {/* Título del formulario */}
             <FormGroup>
-              <Input id="email" name="email" placeholder="Email:" type="email" onChange={ (ev)=> setEmail(ev.target.value)} /> {/* Campo para el correo electrónico */}
+              <Input id="email" name="email" placeholder="Email" type="email" onChange={ (ev)=> setEmail(ev.target.value)} /> {/* Campo para el correo electrónico */}
             </FormGroup>
             <FormGroup>
               <Input id="password" name="password" placeholder="Contraseña" type="password" onChange={ (ev)=> setPassword(ev.target.value)} /> {/* Campo para la contraseña */}

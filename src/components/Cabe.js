@@ -1,10 +1,25 @@
 import React from 'react';
 import { Nav, NavItem } from 'reactstrap'; //importamos las herramientas de bootstrap que se van a usar
-import { NavLink as RouterNavLink } from 'react-router-dom'; //importamos NavLink y le cambiamos el nombre para usarlo como RouterNavLink
+import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom'; //importamos NavLink y le cambiamos el nombre para usarlo como RouterNavLink
 import styles from './Cabe.module.css'; //importamos los estilos personalizados desde un archivo CSS
+import { getAuth, signOut } from 'firebase/auth';
 import logo from './../assets/img/DENEDIGico.png'; //importamos el logo desde la carpeta de imágenes
 
 export const Cabe = () => {
+
+const navigate = useNavigate();
+
+const handleLogout = () =>{
+  const auth =  getAuth();
+  signOut(auth)
+  .then(()=>{
+    navigate('./../screens/Login.js');
+  })
+  .catch((error)=>{
+    console.error('Error al cerrar sesión:', error)
+  })
+}
+
   return ( 
     // usamos el div para darle los diseños de la página en ciertas partes, por lo mismo le agregamos clases y estilos donde le ponemos el nombre de esa parte
     <div className={styles.headerContainer}> 
@@ -38,9 +53,9 @@ export const Cabe = () => {
             </RouterNavLink>
           </NavItem>
           <NavItem>
-            <RouterNavLink to="/app" className={styles['nav-link']}>
+            <span to="/app" className={styles['nav-link']} onClick={handleLogout} style={{ cursor: 'pointer' }}>
               Salir
-            </RouterNavLink>
+            </span>
           </NavItem>
         </div>
       </div>
