@@ -49,7 +49,7 @@ export const CustomCard = () => {
                             <strong>Género:</strong> {contacto.genero}<br />
                             <strong>Correo:</strong> {contacto.correo}<br />
                             <strong>Número:</strong> {contacto.numero}<br />
-                            <strong>Dirección:</strong> {contacto.direccion}
+                            <strong>Ocupación:</strong> {contacto.ocupacion}
                         </CardText> 
         
                         <Button className={styles.eliminar} onClick={() => handleDelete(contacto.id)}> {/* Botón "Eliminar" */}

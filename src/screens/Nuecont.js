@@ -15,7 +15,7 @@ export const Nuecont = () => {
     genero: '',
     correo: '',
     numero: '',
-    direccion: ''
+    ocupacion: ''
   };
 
   // Estado para los valores del formulario
@@ -87,8 +87,8 @@ export const Nuecont = () => {
 
             {/* Campo para dirección */}
             <FormGroup>
-              <Label for="direccion">Dirección:</Label>
-              <Input id="direccion" name="direccion" type="textarea" onChange={capturarInputs} value={user.direccion} />
+              <Label for="ocupacion">Ocupación:</Label>
+              <Input id="ocupacion" name="ocupacion" type="text" onChange={capturarInputs} value={user.ocupacion} />
             </FormGroup>
 
             {/* Botones para guardar */}
