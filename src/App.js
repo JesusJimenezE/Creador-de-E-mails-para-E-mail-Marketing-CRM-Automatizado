@@ -78,9 +78,7 @@ function App() {
         </PrivateRoute>
       } />
       <Route path="/nuepre" element={
-        <PrivateRoute>
           <Nuepre />
-        </PrivateRoute>
       } />
     </Routes>
 
