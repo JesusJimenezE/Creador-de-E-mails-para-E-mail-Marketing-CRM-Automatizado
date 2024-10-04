@@ -34,7 +34,7 @@ export const Nuecont = () => {
       await addDoc(collection(db, 'contactos'), {
         ...user
       });
-      console.log("Datos guardados correctamente");
+      alert("Contacto agregado exitosamente");
     } catch (error) {
       console.error("Error al guardar los datos:", error);
     }

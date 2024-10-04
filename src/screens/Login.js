@@ -25,6 +25,7 @@ const Login = () => {
       navigate('/home'); // Redirigir a la página de inicio si la autenticación es exitosa
     } catch (error) {
       console.error("Error al iniciar sesión:", error);
+      alert("Error en el e-mail o contraseña");
     }
   };
 
