@@ -61,7 +61,7 @@ export const Nuepre = () => {
 
                 // Guardar datos del usuario en Firestore
                 await guardarDatos();
-                
+                alert("Perfil agregado exitosamente");
                 navigate('/login');
             } catch (error) {
                 console.error("Error al crear usuario:", error);
