@@ -5,10 +5,10 @@ import { Button, Input, Label, Form, FormGroup } from 'reactstrap'; // Importa c
 import styles from './Prefil.module.css'; // Importa estilos CSS
 import { getAuth, onAuthStateChanged } from 'firebase/auth'; // Importa Firebase Auth
 import { db } from '../components/firebaseconfig'; // Asegúrate de que db esté bien importado
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore'; // Para actualizar los documentos en Firestore
 
 export const Prefil = () => {
-  const [user, setUser] = useState(null); // Para el usuario autenticado
+  const [userDocId, setUserDocId] = useState(null); // Almacena el ID del documento del usuario
   const [formData, setFormData] = useState({
     nombre: '',
     correo: '',
@@ -21,7 +21,6 @@ export const Prefil = () => {
     const auth = getAuth();
     onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
-        setUser(currentUser); // Guarda el usuario autenticado
         const email = currentUser.email; // Obtén el correo del usuario autenticado
 
         // Realiza una consulta a Firestore para buscar el documento del usuario basado en el correo
@@ -30,12 +29,14 @@ export const Prefil = () => {
         
         if (!querySnapshot.empty) {
           // Si se encuentra el documento, carga los datos en el formulario
-          const userData = querySnapshot.docs[0].data();
+          const userDoc = querySnapshot.docs[0];
+          const userData = userDoc.data();
+          setUserDocId(userDoc.id); // Guarda el ID del documento del usuario para actualizarlo después
           setFormData({
             nombre: userData.nombre || '',
             correo: email, // Usa el correo del usuario autenticado
             numero: userData.numero || '',
-            contraseña: userData.contraseña, // Mantén este campo vacío por razones de seguridad
+            contraseña: userData.contraseña || '', // Mantén la contraseña solo para mostrar, pero no modificar
           });
         } else {
           console.log('No se encontraron datos para este usuario.');
@@ -50,10 +51,25 @@ export const Prefil = () => {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  // Guardar cambios (opcional)
+  // Guardar cambios en Firestore
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Aquí podrías agregar la lógica para actualizar los datos en Firestore si es necesario
+    if (userDocId) {
+      try {
+        // Referencia al documento del usuario en Firestore
+        const userDocRef = doc(db, 'usuario', userDocId);
+
+        // Actualizar los campos 'nombre' y 'numero' en Firestore
+        await updateDoc(userDocRef, {
+          nombre: formData.nombre,
+          numero: formData.numero,
+        });
+
+        console.log('Datos actualizados correctamente');
+      } catch (error) {
+        console.error('Error al actualizar los datos:', error);
+      }
+    }
   };
 
   return (
@@ -64,22 +80,22 @@ export const Prefil = () => {
           <Form onSubmit={handleSubmit}>
             <FormGroup>
               <Label for="nombre">Nombre:</Label>
-              <Input  id="nombre"  name="nombre"  type="text" value={formData.nombre}  onChange={handleChange} />
+              <Input id="nombre" name="nombre" type="text" value={formData.nombre} onChange={handleChange} />
             </FormGroup>
 
             <FormGroup>
               <Label for="correo">Correo:</Label>
-              <Input  id="correo" name="correo" type="email" value={formData.correo} onChange={handleChange} disabled /> {/* El correo no debería cambiarse */}
+              <Input id="correo" name="correo" type="email" value={formData.correo} onChange={handleChange} disabled /> { /* El correo no debería cambiarse */}
             </FormGroup>
 
             <FormGroup>
               <Label for="numero">Número telefónico:</Label>
-              <Input id="numero" name="numero" type="number" value={formData.numero} onChange={handleChange} />
+              <Input id="numero" name="numero" type="number"  value={formData.numero} onChange={handleChange} />
             </FormGroup>
 
             <FormGroup>
               <Label for="contraseña">Contraseña:</Label>
-              <Input id="contraseña" name="contraseña" type="text" value={formData.contraseña} onChange={handleChange} disabled /> 
+              <Input id="contraseña" name="contraseña" type="text" value={formData.contraseña} onChange={handleChange} disabled /> { /* Deshabilitado por seguridad  */}
             </FormGroup>
 
             <Button className={styles.guar} type="submit">Guardar cambios</Button>
