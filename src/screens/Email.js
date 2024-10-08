@@ -5,6 +5,21 @@ import { Piep } from '../components/Piep'; // Importamos el componente del pie d
 import styles from './Email.module.css'; // Importamos los estilos específicos para esta página
 
 export const Email = () => {
+
+  // Estado para la opción seleccionada
+  
+  const [audiencia, setAudiencia ] = useState; 
+  const [ genero, setGenero ] = useState;
+  const [ edad, setEdad ] = useState;
+  const [ ocupacion, setOcupacion ] = useState;
+
+  // Función para manejar el cambio de selección de audiencia
+
+  const handleSelectChange = (e) => {
+    setAudiencia(e.target.value)
+  }
+
+
   return (
     <div>
       {/* Componente de la cabecera */}
@@ -31,13 +46,15 @@ export const Email = () => {
             {/* Selector para elegir la audiencia */}
             <FormGroup>
               <Label for="exampleSelect">Audiencia:</Label>
-              <Input id="exampleSelect" name="select" type="select">
+              <Input id="exampleSelect" name="select" type="select" value={audiencia} onChange={handleSelectChange}>
                 <option value="">Seleccione una opción</option>
-                <option>Genero</option>
-                <option>Edad</option>
-                <option>Ocupación</option>
+                <option value="genero" >Genero</option>
+                <option value="edad" >Edad</option>
+                <option value="ocupacion" >Ocupación</option>
               </Input>
             </FormGroup>
+
+            {/* Campos condicionales dependiendo de la audiencia que escogimos */}
 
             {/* Campo para subir un archivo adjunto */}
             <FormGroup>
