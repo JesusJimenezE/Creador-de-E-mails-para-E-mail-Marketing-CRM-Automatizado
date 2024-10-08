@@ -74,8 +74,8 @@ export const Email = () => {
               <FormGroup>
                 <Label for="edad">Rango de edad:</Label>
                 <div className=''>
-                  <input id="edad-min" name="edad-min" type="number" placeholder="Edad minima" value={edad.min} onChange={(e) => setEdad({ ...edad, min: e.target.value})}/>
-                  <input id="edad-max" name="edad-max" type="number" placeholder="Edad maxima" value={edad.max} onChange={(e) => setEdad({ ...edad, max: e.target.value})}/>
+                  <input id="edad-min" name="edad-min" type="number" placeholder="Edad minima" value={edad.min} onChange={(e) => setEdad({ ...edad, min: e.target.value })} />
+                  <input id="edad-max" name="edad-max" type="number" placeholder="Edad maxima" value={edad.max} onChange={(e) => setEdad({ ...edad, max: e.target.value })} />
                 </div>
               </FormGroup>
 
@@ -84,7 +84,8 @@ export const Email = () => {
             {audiencia === 'ocupacion' && (
 
               <FormGroup>
-
+                <label for="ocupacion">Ocupación</label>
+                <Input id='ocupacion' name='ocupacion' type='text' value={ocupacion} onChange={(e) => setOcupacion(e.target.value)}/>
               </FormGroup>
 
             )}
