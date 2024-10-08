@@ -7,11 +7,11 @@ import styles from './Email.module.css'; // Importamos los estilos específicos 
 export const Email = () => {
 
   // Estado para la opción seleccionada
-  
-  const [audiencia, setAudiencia ] = useState; 
-  const [ genero, setGenero ] = useState;
-  const [ edad, setEdad ] = useState;
-  const [ ocupacion, setOcupacion ] = useState;
+
+  const [audiencia, setAudiencia] = useState;
+  const [genero, setGenero] = useState;
+  const [edad, setEdad] = useState;
+  const [ocupacion, setOcupacion] = useState;
 
   // Función para manejar el cambio de selección de audiencia
 
@@ -55,6 +55,30 @@ export const Email = () => {
             </FormGroup>
 
             {/* Campos condicionales dependiendo de la audiencia que escogimos */}
+
+            {audiencia === 'genero' && (
+
+              <FormGroup>
+
+              </FormGroup>
+
+            )}
+
+            {audiencia === 'edad' && (
+
+              <FormGroup>
+
+              </FormGroup>
+
+            )}
+
+            {audiencia === 'ocupacion' && (
+
+              <FormGroup>
+
+              </FormGroup>
+
+            )}
 
             {/* Campo para subir un archivo adjunto */}
             <FormGroup>
