@@ -9,12 +9,12 @@ export const Email = () => {
     <div>
       {/* Componente de la cabecera */}
       <Cabe />
-      
+
       {/* Contenedor principal de la página de envío de emails */}
       <div className={styles.EmailPage}>
-        
+
         {/* Contenedor para el formulario */}
-        <div className={styles.FormContainer}> 
+        <div className={styles.FormContainer}>
           <Form>
             {/* Campo de texto para el asunto del email */}
             <FormGroup>
@@ -32,9 +32,10 @@ export const Email = () => {
             <FormGroup>
               <Label for="exampleSelect">Audiencia:</Label>
               <Input id="exampleSelect" name="select" type="select">
+                <option value="">Seleccione una opción</option>
                 <option>Genero</option>
                 <option>Edad</option>
-                <option>Ubicacion</option>
+                <option>Ocupación</option>
               </Input>
             </FormGroup>
 

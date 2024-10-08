@@ -95,7 +95,7 @@ export const Nuepre = () => {
                         </FormGroup>
                         <FormGroup>
                             <Label for="contrasena">Contraseña:</Label>
-                            <Input id="password" name="contraseña" onChange={(ev) => setPassword(ev.target.value)} type="password" required />
+                            <Input id="password" name="contraseña" placeholder="minimo 6 caracteres de longitud " onChange={(ev) => setPassword(ev.target.value)} type="password" required />
                         </FormGroup>
                         <Button className={styles.agre} type="submit">Agregar</Button>
                         <Button className={styles.regr} onClick={handleSubmit}>Regresar</Button>

@@ -56,6 +56,7 @@ const Login = () => {
             <Button className={styles.regis} onClick={handleSubmit1}> {/* Botón para registrar */}
               Registrar
             </Button>
+            
           </Form>
         </div>
       </div>
