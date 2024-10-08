@@ -10,7 +10,7 @@ export const Email = () => {
 
   const [audiencia, setAudiencia] = useState('');
   const [genero, setGenero] = useState('');
-  const [edad, setEdad] = useState('');
+  const [edad, setEdad] = useState({ min: '', max: '' });
   const [ocupacion, setOcupacion] = useState('');
 
   // Función para manejar el cambio de selección de audiencia
@@ -72,7 +72,11 @@ export const Email = () => {
             {audiencia === 'edad' && (
 
               <FormGroup>
-
+                <Label for="edad">Rango de edad:</Label>
+                <div className=''>
+                  <input id="edad-min" name="edad-min" type="number" placeholder="Edad minima" value={edad.min} onChange={(e) => setEdad({ ...edad, min: e.target.value})}/>
+                  <input id="edad-max" name="edad-max" type="number" placeholder="Edad maxima" value={edad.max} onChange={(e) => setEdad({ ...edad, max: e.target.value})}/>
+                </div>
               </FormGroup>
 
             )}
