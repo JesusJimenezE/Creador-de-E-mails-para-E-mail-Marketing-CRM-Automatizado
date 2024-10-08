@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Input, Label, Form, FormGroup } from 'reactstrap'; // Importamos los componentes necesarios de Reactstrap
 import { Cabe } from '../components/Cabe'; // Importamos el componente de la cabecera
 import { Piep } from '../components/Piep'; // Importamos el componente del pie de página
@@ -8,10 +8,10 @@ export const Email = () => {
 
   // Estado para la opción seleccionada
 
-  const [audiencia, setAudiencia] = useState;
-  const [genero, setGenero] = useState;
-  const [edad, setEdad] = useState;
-  const [ocupacion, setOcupacion] = useState;
+  const [audiencia, setAudiencia] = useState('');
+  const [genero, setGenero] = useState('');
+  const [edad, setEdad] = useState('');
+  const [ocupacion, setOcupacion] = useState('');
 
   // Función para manejar el cambio de selección de audiencia
 
@@ -59,7 +59,12 @@ export const Email = () => {
             {audiencia === 'genero' && (
 
               <FormGroup>
-
+                <Label for="genero">Género:</Label>
+                <Input id="genero" name="genero" type="select" value={genero} onChange={(e) => setGenero(e.target.value)}>
+                  <option value="Masculino">Masculino</option>
+                  <option value="Femenino">Femenino</option>
+                  <option value="Otros">Otros</option>
+                </Input>
               </FormGroup>
 
             )}
