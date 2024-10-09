@@ -34,11 +34,22 @@ export const Nuepre = () => {
         }));
     };
 
+    // Convertir número telefónico a tipo número antes de guardarlo
     const guardarDatos = async () => {
         try {
+            // Convertir el número a número entero antes de guardarlo
+            const numeroConvertido = parseInt(user.numero, 10);
+            
+            // Verificar si la conversión es correcta
+            if (isNaN(numeroConvertido)) {
+                console.error("El número telefónico no es válido");
+                return;
+            }
+
             await addDoc(collection(db, 'usuario'), {
-                ...user,
+                nombre: user.nombre,
                 correo: email, // Agrega el correo al objeto que se guardará
+                numero: numeroConvertido, // Guardar el número como entero
                 contraseña: password // Agrega la contraseña al objeto que se guardará
             });
             console.log("Datos guardados correctamente");
@@ -95,7 +106,7 @@ export const Nuepre = () => {
                         </FormGroup>
                         <FormGroup>
                             <Label for="contrasena">Contraseña:</Label>
-                            <Input id="password" name="contraseña" placeholder="minimo 6 caracteres de longitud " onChange={(ev) => setPassword(ev.target.value)} type="password" required />
+                            <Input id="password" name="contraseña" placeholder="minimo 6 caracteres de longitud" onChange={(ev) => setPassword(ev.target.value)} type="password" required />
                         </FormGroup>
                         <Button className={styles.agre} type="submit">Agregar</Button>
                         <Button className={styles.regr} onClick={handleSubmit}>Regresar</Button>
