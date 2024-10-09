@@ -30,10 +30,16 @@ export const Nuecont = () => {
   // Función para guardar los datos en Firestore
   const guardarDatos = async (e) => {
     e.preventDefault();
+
+    // Convertir los campos numéricos a números enteros
+    const datosConvertidos = {
+      ...user,
+      edad: parseInt(user.edad, 10),  // Convertir a número entero
+      numero: parseInt(user.numero, 10) // Convertir a número entero
+    };
+
     try {
-      await addDoc(collection(db, 'contactos'), {
-        ...user
-      });
+      await addDoc(collection(db, 'contactos'), datosConvertidos);
       alert("Contacto agregado exitosamente");
     } catch (error) {
       console.error("Error al guardar los datos:", error);
@@ -42,7 +48,6 @@ export const Nuecont = () => {
     // Resetear el formulario
     setUser({ ...valorInicial });
   };
-
   return (
     <div>
       <Cabe /> {/* Componente de cabecera */}
