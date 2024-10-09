@@ -56,13 +56,22 @@ export const Prefil = () => {
     e.preventDefault();
     if (userDocId) {
       try {
+        // Convertir el número a un valor numérico
+        const numeroConvertido = parseInt(formData.numero, 10);
+
+        // Verificar si la conversión es correcta
+        if (isNaN(numeroConvertido)) {
+          console.error('El número telefónico no es válido');
+          return;
+        }
+
         // Referencia al documento del usuario en Firestore
         const userDocRef = doc(db, 'usuario', userDocId);
 
         // Actualizar los campos 'nombre' y 'numero' en Firestore
         await updateDoc(userDocRef, {
           nombre: formData.nombre,
-          numero: formData.numero,
+          numero: numeroConvertido,  // Guardar el número como entero
         });
 
         console.log('Datos actualizados correctamente');
@@ -90,7 +99,7 @@ export const Prefil = () => {
 
             <FormGroup>
               <Label for="numero">Número telefónico:</Label>
-              <Input id="numero" name="numero" type="number"  value={formData.numero} onChange={handleChange} />
+              <Input id="numero" name="numero" type="number" value={formData.numero} onChange={handleChange} />
             </FormGroup>
 
             <FormGroup>
