@@ -31,7 +31,22 @@ export const Email = () => {
 
     } else if (audiencia === 'edad') {
 
-      q = query(collection(db, 'contactos'), where('edad', '>=', parseInt(edad.min)), where('edad', '<=', parseInt(edad.max)));
+      // Verificar que los valores de edad mínima y máxima estén completos y sean válidos
+      const minEdad = parseInt(edad.min);
+      const maxEdad = parseInt(edad.max);
+
+      if (isNaN(minEdad) || isNaN(maxEdad)) {
+        console.log('Por favor, ingresa un rango de edad válido.');
+        return;
+      }
+
+      // Asegurarse de que el rango de edad sea lógico
+      if (minEdad > maxEdad) {
+        console.log('La edad mínima no puede ser mayor que la edad máxima.');
+        return;
+      }
+
+      q = query(collection(db, 'contactos'), where('edad', '>=', minEdad), where('edad', '<=', maxEdad));
 
     } else if (audiencia === 'ocupacion') {
 
