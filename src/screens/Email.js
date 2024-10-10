@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Input, Label, Form, FormGroup } from 'reactstrap'; // Importamos los componentes necesarios de Reactstrap
 import { Cabe } from '../components/Cabe'; // Importamos el componente de la cabecera
 import { Piep } from '../components/Piep'; // Importamos el componente del pie de página
@@ -14,6 +14,26 @@ export const Email = () => {
   const [genero, setGenero] = useState('');
   const [edad, setEdad] = useState({ min: '', max: '' });
   const [ocupacion, setOcupacion] = useState('');
+  const [ ocupacionesDisponible, setOcupacionesDisponibles ] = useState([]);
+
+  // Cargar las ocupaciones desde Firebase al iniciar el componente
+  useEffect(() =>{
+    const obtenerOcupaciones = async () => {
+      const ocupaciones = [];
+      const q = query(collection(db, 'contactos'));
+      const querySnapshot = await getDocs(q);
+
+      querySnapshot.forEach((doc) =>{
+        const data = doc.data();
+        if (data.ocupacion && !ocupaciones.includes(data.ocupacion)){
+          ocupaciones.push(data.ocupacion);
+        }
+      });
+
+      setOcupacionesDisponibles(ocupaciones);
+    };
+    obtenerOcupaciones();
+  }, []);
 
   // Función para manejar el cambio de selección de audiencia
   const handleSelectChange = (e) => {
@@ -65,7 +85,7 @@ export const Email = () => {
           console.log('Correo:', doc.data().correo);
         });
 
-      } else{
+      } else {
 
         console.log('No se encontraron resultados para la audiencia seleccionada.');
       }
@@ -114,6 +134,7 @@ export const Email = () => {
               <FormGroup>
                 <Label for="genero">Género:</Label>
                 <Input id="genero" name="genero" type="select" value={genero} onChange={(e) => setGenero(e.target.value)}>
+                  <option value="">Seleccione una opción</option>
                   <option value="Masculino">Masculino</option>
                   <option value="Femenino">Femenino</option>
                   <option value="Otros">Otros</option>
@@ -127,8 +148,8 @@ export const Email = () => {
               <FormGroup>
                 <Label for="edad">Rango de edad:</Label>
                 <div className=''>
-                <input id="edad-min" name="edad-min" type="number" placeholder="Edad mínima" value={edad.min} onChange={(e) => setEdad({ ...edad, min: e.target.value })} />
-                <input id="edad-max" name="edad-max" type="number" placeholder="Edad máxima" value={edad.max} onChange={(e) => setEdad({ ...edad, max: e.target.value })} />
+                  <input id="edad-min" name="edad-min" type="number" placeholder="Edad mínima" value={edad.min} onChange={(e) => setEdad({ ...edad, min: e.target.value })} />
+                  <input id="edad-max" name="edad-max" type="number" placeholder="Edad máxima" value={edad.max} onChange={(e) => setEdad({ ...edad, max: e.target.value })} />
                 </div>
               </FormGroup>
 
@@ -138,7 +159,12 @@ export const Email = () => {
 
               <FormGroup>
                 <label for="ocupacion">Ocupación</label>
-                <Input id='ocupacion' name='ocupacion' type='text' value={ocupacion} onChange={(e) => setOcupacion(e.target.value)} />
+                <Input id='ocupacion' name='ocupacion' type='select' value={ocupacion} onChange={(e) => setOcupacion(e.target.value)} >
+                <option value="">Seleccione una opción</option>
+                {ocupacionesDisponible.map((ocupacion, index) => (
+                  <option key={index} value={ocupacion}>{ocupacion}</option>
+                ))}
+                </Input>
               </FormGroup>
 
             )}

@@ -74,7 +74,7 @@ export const Prefil = () => {
           numero: numeroConvertido,  // Guardar el número como entero
         });
 
-        console.log('Datos actualizados correctamente');
+        alert("Perfil editado correctamente");
       } catch (error) {
         console.error('Error al actualizar los datos:', error);
       }
