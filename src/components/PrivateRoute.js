@@ -1,32 +1,40 @@
 import React, { useEffect, useState } from 'react';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import { getAuth, onAuthStateChanged } from 'firebase/auth'; // Importa Firebase Authentication
+import { useNavigate } from 'react-router-dom'; // Hook para redireccionamiento en React Router
 
-const PrivateRoute = ({ children }) => { // Corregido el nombre de la propiedad
-    const [loading, setLoading] = useState(true);
-    const [isAuthenticated, setIsAuthenticated] = useState(false); // Inicialmente debe ser false
-    const navigate = useNavigate();
+const PrivateRoute = ({ children }) => {
+    const [loading, setLoading] = useState(true); // Estado para gestionar el proceso de carga
+    const [isAuthenticated, setIsAuthenticated] = useState(false); // Estado para verificar si el usuario está autenticado
+    const navigate = useNavigate(); // Hook para la navegación entre rutas
 
+    // Efecto para comprobar el estado de autenticación del usuario
     useEffect(() => {
-        const auth = getAuth();
+        const auth = getAuth(); // Obtiene la instancia de autenticación de Firebase
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
-                setIsAuthenticated(true); // Usuario autenticado
+                // Si el usuario está autenticado
+                setIsAuthenticated(true);
             } else {
-                setIsAuthenticated(false); // Usuario no autenticado
-                navigate('/login'); // Redirige al login si no hay usuario
+                // Si no hay usuario autenticado, redirige a la página de login
+                setIsAuthenticated(false);
+                navigate('/login');
             }
-            setLoading(false); // Finaliza el estado de carga
+            // Una vez que se verifica la autenticación, detiene el estado de carga
+            setLoading(false);
         });
 
-        return () => unsubscribe(); // Limpieza del listener cuando el componente se desmonta
+        // Cleanup: Elimina el listener cuando el componente se desmonta
+        return () => unsubscribe();
     }, [navigate]);
 
+    // Muestra un mensaje mientras se verifica el estado de autenticación
     if (loading) {
-        return <div>Cargando...</div>; // Muestra un mensaje de carga mientras espera la verificación
+        return <div>Cargando...</div>;
     }
 
-    return isAuthenticated ? children : null; // Muestra los hijos si está autenticado
+    // Si el usuario está autenticado, renderiza los hijos del componente (contenido privado)
+    // Si no está autenticado, no renderiza nada
+    return isAuthenticated ? children : null;
 };
 
 export default PrivateRoute;

@@ -1,10 +1,10 @@
-import React from 'react';
-import { Button } from 'reactstrap'; // Importamos el componente Button de Reactstrap para usar botones con estilo
-import { Routes, Route, useNavigate } from 'react-router-dom'; // Importamos las herramientas de navegación y manejo de rutas
-import styles from './App.css'; // Importamos los estilos de la aplicación
+import React from 'react'; // Importa React para poder usarlo en el componente
+import { Button } from 'reactstrap'; // Importa el componente Button de Reactstrap para usar botones con estilo
+import { Routes, Route, useNavigate } from 'react-router-dom'; // Importa las herramientas de navegación y manejo de rutas
+import styles from './App.css'; // Importa los estilos de la aplicación
 import inicabe from './assets/img/inicabe.png'; // Imagen para la parte superior
 import DENEDIG from './assets/img/DENEDIGico.png'; // Logo de DENEDIG
-import { Piep } from './components/Piep'; // Importamos el componente del pie de página
+import { Piep } from './components/Piep'; // Importa el componente del pie de página
 import Login from './screens/Login'; // Pantalla de inicio de sesión
 import Home from './screens/Home'; // Pantalla de inicio
 import Contac from './screens/Contac'; // Pantalla de contactos
@@ -14,21 +14,21 @@ import Nuecont from './screens/Nuecont'; // Pantalla para agregar nuevo contacto
 import Nuepre from './screens/Nuepre'; // Pantalla para agregar nuevo perfil
 import PrivateRoute from './components/PrivateRoute'; // Componente de protección de rutas
 
-function App() {
+function App() { // Define el componente App
   const navigate = useNavigate(); // Hook para la navegación entre páginas
 
   // Función para redirigir a la página de login cuando se hace clic en el botón
   const handleLoginClick = () => {
-    navigate('/login');
+    navigate('/login'); // Redirige a la ruta de login
   };
 
   return (
-    <Routes>
+    <Routes> {/* Define las rutas de la aplicación */}
       {/* Ruta para la página principal (home) */}
       <Route
         path="/"
         element={
-          <div className="App">
+          <div className="App"> {/* Contenedor principal de la aplicación */}
             {/* Imagen superior de la cabecera */}
             <img src={inicabe} alt="Parte de arriba" className="header-image" />
             <div>
@@ -78,12 +78,10 @@ function App() {
         </PrivateRoute>
       } />
       <Route path="/nuepre" element={
-          <Nuepre />
+          <Nuepre /> // Ruta sin protección para agregar un nuevo perfil
       } />
     </Routes>
-
-    
   );
 }
 
-export default App;
+export default App; // Exporta el componente App
