@@ -9,11 +9,11 @@ import { db } from './../components/firebaseconfig'; // Importamos la configurac
 export const Email = () => { // Definimos el componente Email.
 
   // Definimos los estados para manejar los datos del formulario y la audiencia seleccionada.
-  const [audiencia, setAudiencia] = useState(''); // Estado para la audiencia seleccionada.
   const [genero, setGenero] = useState(''); // Estado para el género seleccionado.
   const [edad, setEdad] = useState({ min: '', max: '' }); // Estado para el rango de edad (mínimo y máximo).
   const [ocupacion, setOcupacion] = useState(''); // Estado para la ocupación seleccionada.
   const [ocupacionesDisponible, setOcupacionesDisponibles] = useState([]); // Estado para almacenar las ocupaciones disponibles desde Firebase.
+  const [cargando, setCargando] = useState(false); // Estado de carga.
 
   // useEffect para cargar las ocupaciones disponibles desde Firebase al cargar el componente.
   useEffect(() => {
@@ -34,52 +34,53 @@ export const Email = () => { // Definimos el componente Email.
     obtenerOcupaciones(); // Ejecutamos la función al montar el componente.
   }, []); // El efecto se ejecuta solo una vez, cuando el componente se monta.
 
-  // Función para manejar el cambio en la selección de audiencia (género, edad, ocupación).
-  const handleSelectChange = (e) => {
-    setAudiencia(e.target.value); // Actualizamos el estado de audiencia según la opción seleccionada.
-  };
-
-  // Función asíncrona para buscar correos en Firestore según el criterio seleccionado.
+  // Función para buscar correos en Firestore.
   const buscarCorreos = async () => {
-    let q; // Variable para almacenar la consulta.
+    setCargando(true);
+    try {
+      const contactosRef = collection(db, 'contactos');
+      let filtros = [];
 
-    // Crear la consulta dependiendo del criterio seleccionado.
-    if (audiencia === 'genero') {
-      q = query(collection(db, 'contactos'), where('genero', '==', genero)); // Filtrar por género.
-    } else if (audiencia === 'edad') {
-      const minEdad = parseInt(edad.min); // Convertir la edad mínima a número.
-      const maxEdad = parseInt(edad.max); // Convertir la edad máxima a número.
-
-      // Validar que los valores de edad mínima y máxima sean números.
-      if (isNaN(minEdad) || isNaN(maxEdad)) {
-        console.log('Por favor, ingresa un rango de edad válido.');
-        return; // Detener la ejecución si la validación falla.
+      if (genero && genero !== 'Todos') {
+        filtros.push(where('genero', '==', genero));
       }
 
-      // Verificar que la edad mínima no sea mayor que la máxima.
+      if (ocupacion && ocupacion !== 'Todos') {
+        filtros.push(where('ocupacion', '==', ocupacion));
+      }
+
+      const minEdad = parseInt(edad.min) || 0;
+      const maxEdad = parseInt(edad.max) || 100;
+
       if (minEdad > maxEdad) {
-        console.log('La edad mínima no puede ser mayor que la edad máxima.');
-        return; // Detener la ejecución si la validación falla.
+        console.error('Rango de edad inválido.');
+        setCargando(false);
+        return;
       }
 
-      // Filtrar los contactos cuyo rango de edad esté dentro de los valores seleccionados.
-      q = query(collection(db, 'contactos'), where('edad', '>=', minEdad), where('edad', '<=', maxEdad));
-    } else if (audiencia === 'ocupacion') {
-      q = query(collection(db, 'contactos'), where('ocupacion', '==', ocupacion)); // Filtrar por ocupación.
-    }
+      if (edad.min) filtros.push(where('edad', '>=', minEdad));
+      if (edad.max) filtros.push(where('edad', '<=', maxEdad));
 
-    // Ejecutar la consulta solo si se ha definido una consulta.
-    if (q) {
-      const querySnapshot = await getDocs(q); // Ejecutamos la consulta y obtenemos los documentos.
-      if (!querySnapshot.empty) { // Si hay resultados.
-        querySnapshot.forEach((doc) => { // Recorremos cada documento del resultado.
-          console.log('Correo:', doc.data().correo); // Imprimimos el correo del contacto en la consola.
+      const q = filtros.length
+        ? query(contactosRef, ...filtros)
+        : query(contactosRef);
+
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        querySnapshot.forEach((doc) => {
+          console.log('Correo:', doc.data().correo);
         });
       } else {
-        console.log('No se encontraron resultados para la audiencia seleccionada.'); // Mensaje si no hay resultados.
+        console.log('No se encontraron resultados.');
       }
+    } catch (error) {
+      console.error('Error al buscar correos:', error);
+    } finally {
+      setCargando(false);
     }
   };
+  
 
   return (
     <div>
@@ -106,34 +107,36 @@ export const Email = () => { // Definimos el componente Email.
 
             {/* Campo para seleccionar genero */}
             <FormGroup>
-                <Label for="genero">Género:</Label>
-                <Input id="genero" name="genero" type="select" value={genero} onChange={(e) => setGenero(e.target.value)}>
-                  <option value="">Seleccione una opción</option>
-                  <option value="Masculino">Masculino</option>
-                  <option value="Femenino">Femenino</option>
-                  <option value="Otros">Otros</option>
-                </Input>
-              </FormGroup>
+              <Label for="genero">Género:</Label>
+              <Input id="genero" name="genero" type="select" value={genero} onChange={(e) => setGenero(e.target.value)}>
+                <option value="">Seleccione una opción</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Femenino">Femenino</option>
+                <option value="Otros">Otros</option>
+                <option value="Todos">Todos</option>
+              </Input>
+            </FormGroup>
 
-              {/* Campo para seleccionar edad */}
-              <FormGroup>
-                <Label for="edad">Rango de edad:</Label>
-                <div>
-                  <input id="edad-min" name="edad-min" type="number" placeholder="Edad mínima" value={edad.min} onChange={(e) => setEdad({ ...edad, min: e.target.value })} />
-                  <input id="edad-max" name="edad-max" type="number" placeholder="Edad máxima" value={edad.max} onChange={(e) => setEdad({ ...edad, max: e.target.value })} />
-                </div>
-              </FormGroup>
+            {/* Campo para seleccionar edad */}
+            <FormGroup>
+              <Label for="edad">Rango de edad:</Label>
+              <div>
+                <input id="edad-min" name="edad-min" type="number" placeholder="Edad mínima" value={edad.min} onChange={(e) => setEdad({ ...edad, min: Number(e.target.value) })}/>
+                <input id="edad-max" name="edad-max" type="number" placeholder="Edad máxima" value={edad.max} onChange={(e) => setEdad({ ...edad, max: Number(e.target.value) })} />
+              </div>
+            </FormGroup>
 
-              {/* Campo para seleccionar ocupacion */}
-              <FormGroup>
-                <label for="ocupacion">Ocupación</label>
-                <Input id="ocupacion" name="ocupacion" type="select" value={ocupacion} onChange={(e) => setOcupacion(e.target.value)}>
-                  <option value="">Seleccione una opción</option>
-                  {ocupacionesDisponible.map((ocupacion, index) => (
-                    <option key={index} value={ocupacion}>{ocupacion}</option>
-                  ))}
-                </Input>
-              </FormGroup>
+            {/* Campo para seleccionar ocupacion */}
+            <FormGroup>
+              <label for="ocupacion">Ocupación</label>
+              <Input id="ocupacion" name="ocupacion" type="select" value={ocupacion} onChange={(e) => setOcupacion(e.target.value)}>
+                <option value="">Seleccione una opción</option>
+                {ocupacionesDisponible.map((ocupacion, index) => (
+                  <option key={index} value={ocupacion}>{ocupacion}</option>
+                ))}
+                <option value="Todos">Todos</option>
+              </Input>
+            </FormGroup>
 
             {/* Campo para subir un archivo adjunto */}
             <FormGroup>
