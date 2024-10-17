@@ -39,45 +39,45 @@ export const Email = () => { // Definimos el componente Email.
     setCargando(true); // Activa el estado de carga para mostrar que se está procesando la búsqueda.
     try {
       // Referencia a la colección 'contactos' en Firestore.
-      const contactosRef = collection(db, 'contactos'); 
-  
+      const contactosRef = collection(db, 'contactos');
+
       let filtros = []; // Array para almacenar los filtros aplicados en la consulta.
-  
+
       // Si el género es diferente de 'Todos', se agrega un filtro por género.
       if (genero && genero !== 'Todos') {
         filtros.push(where('genero', '==', genero));
       }
-  
+
       // Si la ocupación es diferente de 'Todos', se agrega un filtro por ocupación.
       if (ocupacion && ocupacion !== 'Todos') {
         filtros.push(where('ocupacion', '==', ocupacion));
       }
-  
+
       // Convertimos los valores del rango de edad a números enteros.
       const minEdad = parseInt(edad.min) || 0; // Edad mínima, por defecto 0.
       const maxEdad = parseInt(edad.max) || 100; // Edad máxima, por defecto 100.
-  
+
       // Validación para asegurarse de que la edad mínima no sea mayor que la máxima.
       if (minEdad > maxEdad) {
         console.error('Rango de edad inválido.'); // Muestra un error en consola.
         setCargando(false); // Desactiva el estado de carga.
         return; // Sale de la función para evitar una consulta inválida.
       }
-  
+
       // Si se proporcionó una edad mínima, se agrega el filtro correspondiente.
       if (edad.min) filtros.push(where('edad', '>=', minEdad));
       // Si se proporcionó una edad máxima, se agrega el filtro correspondiente.
       if (edad.max) filtros.push(where('edad', '<=', maxEdad));
-  
+
       // Construimos la consulta:
       // Si hay filtros, se aplica cada uno con '...filtros'; si no, se consulta toda la colección.
       const q = filtros.length
         ? query(contactosRef, ...filtros) // Consulta con filtros.
         : query(contactosRef); // Consulta sin filtros.
-  
+
       // Ejecuta la consulta y almacena el resultado.
       const querySnapshot = await getDocs(q);
-  
+
       // Verifica si hay resultados.
       if (!querySnapshot.empty) {
         // Si hay resultados, los recorremos y mostramos el correo en la consola.
@@ -96,7 +96,6 @@ export const Email = () => { // Definimos el componente Email.
       setCargando(false);
     }
   };
-  
 
   return (
     <div>
@@ -115,12 +114,6 @@ export const Email = () => { // Definimos el componente Email.
               <Input id="asunto" name="asunto" type="text" />
             </FormGroup>
 
-            {/* Campo para el contenido del email */}
-            <FormGroup>
-              <Label for="conte">Contenido:</Label>
-              <Input id="conte" name="text" type="textarea" />
-            </FormGroup>
-
             {/* Campo para seleccionar genero */}
             <FormGroup>
               <Label for="genero">Género:</Label>
@@ -137,7 +130,7 @@ export const Email = () => { // Definimos el componente Email.
             <FormGroup>
               <Label for="edad">Rango de edad:</Label>
               <div>
-                <input id="edad-min" name="edad-min" type="number" placeholder="Edad mínima" value={edad.min} onChange={(e) => setEdad({ ...edad, min: Number(e.target.value) })}/>
+                <input id="edad-min" name="edad-min" type="number" placeholder="Edad mínima" value={edad.min} onChange={(e) => setEdad({ ...edad, min: Number(e.target.value) })} />
                 <input id="edad-max" name="edad-max" type="number" placeholder="Edad máxima" value={edad.max} onChange={(e) => setEdad({ ...edad, max: Number(e.target.value) })} />
               </div>
             </FormGroup>
@@ -152,6 +145,12 @@ export const Email = () => { // Definimos el componente Email.
                 ))}
                 <option value="Todos">Todos</option>
               </Input>
+            </FormGroup>
+
+            {/* Campo para el contenido del email */}
+            <FormGroup>
+              <Label for="conte">Contenido:</Label>
+              <Input id="conte" name="text" type="textarea" />
             </FormGroup>
 
             {/* Campo para subir un archivo adjunto */}
