@@ -3,6 +3,9 @@ import { initializeApp } from 'firebase/app';
 // Importa la función para inicializar Firestore (base de datos en tiempo real de Firebase)
 import { getFirestore } from 'firebase/firestore';
 
+//Exportamos la api key
+export const sendGridApiKey = "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";
+
 // Configuración de Firebase
 // Este objeto contiene las credenciales únicas y detalles del proyecto de Firebase
 const firebaseConfig = {
@@ -12,7 +15,7 @@ const firebaseConfig = {
   storageBucket: "emailcrm-697b1.appspot.com",                // Bucket de almacenamiento
   messagingSenderId: "71327977451",                           // ID del remitente de mensajes
   appId: "1:71327977451:web:d5d91a6c2d1b2129e6d3ae",          // ID de la aplicación
-  measurementId: "G-7ZESFKB59K"                               // ID de medición para Google Analytics
+  measurementId: "G-7ZESFKB59K",                               // ID de medición para Google Analytics
 };
 
 // Inicializa la aplicación de Firebase
@@ -23,5 +26,6 @@ const appFirebase = initializeApp(firebaseConfig);
 // Con getFirestore, conectamos la aplicación a la base de datos Firestore
 const db = getFirestore(appFirebase);
 
+
 // Exporta la instancia de Firebase y Firestore para usarlas en otros componentes
-export { appFirebase, db };
+export { appFirebase, db, firebaseConfig };
