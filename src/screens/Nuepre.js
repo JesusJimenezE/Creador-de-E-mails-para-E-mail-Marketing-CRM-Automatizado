@@ -102,9 +102,7 @@ export const Nuepre = () => { // Definimos el componente Nuepre.
                         <FormGroup>
                             <Label for="nombrep">Nombre:</Label>
                             <Input 
-                                id="nombrep" 
-                                name="nombre" 
-                                type="text" 
+                                id="nombrep" name="nombre" type="text" 
                                 onChange={capturarInputs} // Maneja cambios en el input
                                 required // Hace que el campo sea obligatorio
                             />
@@ -113,20 +111,15 @@ export const Nuepre = () => { // Definimos el componente Nuepre.
                             <Label for="correop">Correo:</Label>
                             <Input 
                                 id="email" 
-                                name="correo" 
-                                onChange={(ev) => setEmail(ev.target.value)} // Maneja cambios en el input de correo
-                                type="email" 
-                                required // Hace que el campo sea obligatorio
+                                name="correo" onChange={(ev) => setEmail(ev.target.value)} // Maneja cambios en el input de correo
+                                type="email"  required // Hace que el campo sea obligatorio
                             />
                         </FormGroup>
                         <FormGroup>
                             <Label for="numerop">Número telefónico:</Label>
                             <Input 
-                                id="numerop" 
-                                name="numero" 
-                                onChange={capturarInputs} // Maneja cambios en el input
-                                type="tel" 
-                                required // Hace que el campo sea obligatorio
+                                id="numerop" name="numero" onChange={capturarInputs} // Maneja cambios en el input
+                                type="tel"  required // Hace que el campo sea obligatorio
                             />
                         </FormGroup>
                         <FormGroup>

@@ -61,10 +61,7 @@ export const Nuecont = () => { // Definimos el componente Nuecont.
             <FormGroup>
               <Label for="nombrec">Nombre:</Label>
               <Input 
-                id="nombrec" 
-                name="nombre" 
-                type="text" 
-                onChange={capturarInputs} // Maneja cambios en el input
+                id="nombrec" name="nombre" type="text" onChange={capturarInputs} // Maneja cambios en el input
                 value={user.nombre} // Valor del input vinculado al estado
               />
             </FormGroup>
@@ -73,10 +70,7 @@ export const Nuecont = () => { // Definimos el componente Nuecont.
             <FormGroup>
               <Label for="edad">Edad:</Label>
               <Input 
-                id="edad" 
-                name="edad" 
-                type="number" 
-                onChange={capturarInputs} // Maneja cambios en el input
+                id="edad" name="edad" type="number" onChange={capturarInputs} // Maneja cambios en el input
                 value={user.edad} // Valor del input vinculado al estado
               />
             </FormGroup>
@@ -85,10 +79,7 @@ export const Nuecont = () => { // Definimos el componente Nuecont.
             <FormGroup>
               <Label for="genero">Género:</Label>
               <Input 
-                id="genero" 
-                name="genero" 
-                type="select" 
-                onChange={capturarInputs} // Maneja cambios en el input
+                id="genero" name="genero" type="select" onChange={capturarInputs} // Maneja cambios en el input
                 value={user.genero} // Valor del input vinculado al estado
               >
                 <option value="">Seleccione una opción</option> {/* Opción predeterminada */}
@@ -102,10 +93,7 @@ export const Nuecont = () => { // Definimos el componente Nuecont.
             <FormGroup>
               <Label for="correoc">Correo:</Label>
               <Input 
-                id="correoc" 
-                name="correo" 
-                type="email" 
-                onChange={capturarInputs} // Maneja cambios en el input
+                id="correoc" name="correo" type="email" onChange={capturarInputs} // Maneja cambios en el input
                 value={user.correo} // Valor del input vinculado al estado
               />
             </FormGroup>
@@ -114,10 +102,7 @@ export const Nuecont = () => { // Definimos el componente Nuecont.
             <FormGroup>
               <Label for="numeroc">Número telefónico:</Label>
               <Input 
-                id="numeroc" 
-                name="numero" 
-                type="number" 
-                onChange={capturarInputs} // Maneja cambios en el input
+                id="numeroc" name="numero" type="number" onChange={capturarInputs} // Maneja cambios en el input
                 value={user.numero} // Valor del input vinculado al estado
               />
             </FormGroup>
@@ -126,10 +111,7 @@ export const Nuecont = () => { // Definimos el componente Nuecont.
             <FormGroup>
               <Label for="ocupacion">Ocupación:</Label>
               <Input 
-                id="ocupacion" 
-                name="ocupacion" 
-                type="text" 
-                onChange={capturarInputs} // Maneja cambios en el input
+                id="ocupacion" name="ocupacion" type="text" onChange={capturarInputs} // Maneja cambios en el input
                 value={user.ocupacion} // Valor del input vinculado al estado
               />
             </FormGroup>

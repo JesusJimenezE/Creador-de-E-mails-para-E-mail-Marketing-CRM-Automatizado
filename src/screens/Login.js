@@ -48,21 +48,11 @@ const Login = () => { // Definimos el componente Login.
             <Label for="ini">Iniciar sesión</Label> {/* Título del formulario */}
             <FormGroup>
               <Input 
-                id="email" 
-                name="email" 
-                placeholder="Email" 
-                type="email" 
-                onChange={(ev) => setEmail(ev.target.value)} 
-              /> {/* Campo para el correo electrónico */}
+                id="email" name="email" placeholder="Email" type="email" onChange={(ev) => setEmail(ev.target.value)}/> {/* Campo para el correo electrónico */}
             </FormGroup>
             <FormGroup>
               <Input 
-                id="password" 
-                name="password" 
-                placeholder="Contraseña" 
-                type="password" 
-                onChange={(ev) => setPassword(ev.target.value)} 
-              /> {/* Campo para la contraseña */}
+                id="password" name="password" placeholder="Contraseña" type="password" onChange={(ev) => setPassword(ev.target.value)}  /> {/* Campo para la contraseña */}
             </FormGroup>
             <Button className={styles.inic} onClick={login}> {/* Botón para iniciar sesión */}
               Iniciar sesión

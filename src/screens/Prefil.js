@@ -90,10 +90,7 @@ export const Prefil = () => { // Define el componente Prefil
             <FormGroup>
               <Label for="nombre">Nombre:</Label>
               <Input 
-                id="nombre" 
-                name="nombre" 
-                type="text" 
-                value={formData.nombre} // Muestra el valor del nombre en el input
+                id="nombre" name="nombre" type="text" value={formData.nombre} // Muestra el valor del nombre en el input
                 onChange={handleChange} // Maneja cambios en el input
               />
             </FormGroup>
@@ -101,10 +98,7 @@ export const Prefil = () => { // Define el componente Prefil
             <FormGroup>
               <Label for="correo">Correo:</Label>
               <Input 
-                id="correo" 
-                name="correo" 
-                type="email" 
-                value={formData.correo} // Muestra el correo en el input
+                id="correo" name="correo" type="email" value={formData.correo} // Muestra el correo en el input
                 onChange={handleChange} // Maneja cambios en el input
                 disabled // El correo no debería cambiarse
               />
@@ -113,10 +107,7 @@ export const Prefil = () => { // Define el componente Prefil
             <FormGroup>
               <Label for="numero">Número telefónico:</Label>
               <Input 
-                id="numero" 
-                name="numero" 
-                type="number" 
-                value={formData.numero} // Muestra el número en el input
+                id="numero" name="numero" type="number" value={formData.numero} // Muestra el número en el input
                 onChange={handleChange} // Maneja cambios en el input
               />
             </FormGroup>
@@ -124,10 +115,7 @@ export const Prefil = () => { // Define el componente Prefil
             <FormGroup>
               <Label for="contraseña">Contraseña:</Label>
               <Input 
-                id="contraseña" 
-                name="contraseña" 
-                type="text" 
-                value={formData.contraseña} // Muestra la contraseña en el input
+                id="contraseña" name="contraseña" type="text" value={formData.contraseña} // Muestra la contraseña en el input
                 onChange={handleChange} // Maneja cambios en el input
                 disabled // Deshabilitado por seguridad
               />
