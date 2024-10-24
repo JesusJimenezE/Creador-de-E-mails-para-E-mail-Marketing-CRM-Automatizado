@@ -5,6 +5,7 @@ import { Piep } from '../components/Piep'; // Importamos el componente del pie d
 import styles from './Email.module.css'; // Importamos los estilos específicos de esta página desde un archivo CSS.
 import { collection, query, where, getDocs } from 'firebase/firestore'; // Importamos las funciones de Firebase Firestore para hacer consultas.
 import { db } from './../components/firebaseconfig'; // Importamos la configuración de Firebase para acceder a la base de datos.
+import EnvioEmails from './../components/envioEmails'; // Importamos la configuracion para mandar e-mail
 
 export const Email = () => { // Definimos el componente Email.
 
@@ -14,6 +15,8 @@ export const Email = () => { // Definimos el componente Email.
   const [ocupacion, setOcupacion] = useState(''); // Estado para la ocupación seleccionada.
   const [ocupacionesDisponible, setOcupacionesDisponibles] = useState([]); // Estado para almacenar las ocupaciones disponibles desde Firebase.
   const [cargando, setCargando] = useState(false); // Estado de carga.
+  const [asunto, setAsunto] = useState(''); // Estado para el asunto del correo
+  const [contenido, setContenido] = useState(''); // Estado para el contenido del correo
 
   // useEffect para cargar las ocupaciones disponibles desde Firebase al cargar el componente.
   useEffect(() => {
@@ -71,19 +74,21 @@ export const Email = () => { // Definimos el componente Email.
 
       // Construimos la consulta:
       // Si hay filtros, se aplica cada uno con '...filtros'; si no, se consulta toda la colección.
-      const q = filtros.length
-        ? query(contactosRef, ...filtros) // Consulta con filtros.
-        : query(contactosRef); // Consulta sin filtros.
-
+      const q = filtros.length ? query(contactosRef, ...filtros) : query(contactosRef);
+      
       // Ejecuta la consulta y almacena el resultado.
-      const querySnapshot = await getDocs(q);
+      const querySnapshot = await getDocs(q);    
 
       // Verifica si hay resultados.
       if (!querySnapshot.empty) {
-        // Si hay resultados, los recorremos y mostramos el correo en la consola.
+        const correos = []; 
         querySnapshot.forEach((doc) => {
-          console.log('Correo:', doc.data().correo);
+          correos.push(doc.data().correo);
         });
+
+        await Promise.all(correos.map(correo => EnvioEmails(correo, asunto, contenido)));
+        console.log('Correos enviados correctamente');
+        
       } else {
         // Si no se encontraron resultados, mostramos un mensaje en consola.
         console.log('No se encontraron resultados.');
@@ -111,7 +116,7 @@ export const Email = () => { // Definimos el componente Email.
             {/* Campo de texto para el asunto del email */}
             <FormGroup>
               <Label for="asunto">Asunto:</Label>
-              <Input id="asunto" name="asunto" type="text" />
+              <Input id="asunto" name="asunto" type="text" value={asunto} onChange={(e) => setAsunto(e.target.value)} />
             </FormGroup>
 
             {/* Campo para seleccionar genero */}
@@ -150,7 +155,7 @@ export const Email = () => { // Definimos el componente Email.
             {/* Campo para el contenido del email */}
             <FormGroup>
               <Label for="conte">Contenido:</Label>
-              <Input id="conte" name="text" type="textarea" />
+              <Input id="conte" name="text" type="textarea"  value={contenido} onChange={(e) => setContenido(e.target.value)}/>
             </FormGroup>
 
             {/* Campo para subir un archivo adjunto */}
@@ -160,7 +165,10 @@ export const Email = () => { // Definimos el componente Email.
             </FormGroup>
 
             {/* Botones para enviar el formulario y limpiar los campos */}
-            <Button className={styles.env} onClick={buscarCorreos}>Enviar</Button>
+            <Button className={styles.env}  onClick={(e) => {
+                e.preventDefault(); // Prevenir la recarga de la página
+                buscarCorreos(); // Llamar a la función para buscar y enviar correos
+              }}>Enviar</Button>
             <Button className={styles.lim}>Limpiar</Button>
           </Form>
         </div>
