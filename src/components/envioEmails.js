@@ -1,6 +1,6 @@
 import sgMail from '@sendgrid/mail';
 import { getAuth } from 'firebase/auth';
-import {} from 'firebaseconfig.js';
+import { } from './firebaseconfig';
 
 // clave API de SendGrid
 sgMail.setApiKey(process.env.sendGridApiKey);
@@ -12,7 +12,7 @@ const EnvioEmails = async (to, subject, text) => {
 
   if (!user) {
     throw new Error('No hay usuario autenticado.'); // Maneja el caso en que no hay usuario
-  } 
+  }
 
   const msg = {
     to, // Dirección de destino
