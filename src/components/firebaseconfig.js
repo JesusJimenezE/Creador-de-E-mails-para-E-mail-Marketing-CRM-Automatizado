@@ -3,9 +3,6 @@ import { initializeApp } from 'firebase/app';
 // Importa la función para inicializar Firestore (base de datos en tiempo real de Firebase)
 import { getFirestore } from 'firebase/firestore';
 
-//Exportamos la api key
-export const sendGridApiKey = "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";
-
 // Configuración de Firebase
 // Este objeto contiene las credenciales únicas y detalles del proyecto de Firebase
 const firebaseConfig = {
