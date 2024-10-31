@@ -1,2 +1,4 @@
+const { request } = require("express");
+
 requiere('dorenv').config();
-conts express
+conts express = require
