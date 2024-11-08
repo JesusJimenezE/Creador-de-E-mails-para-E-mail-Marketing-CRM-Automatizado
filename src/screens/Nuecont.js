@@ -119,9 +119,7 @@ export const Nuecont = () => { // Definimos el componente Nuecont.
             {/* Botones para guardar y limpiar */}
             <Button className={styles.guar} type="submit">Guardar</Button> {/* Botón para guardar */}
             <Button 
-              className={styles.lim} 
-              type="button" 
-              onClick={() => setUser({ ...valorInicial })} // Limpiar los campos del formulario
+              className={styles.lim} type="button" onClick={() => setUser({ ...valorInicial })} // Limpiar los campos del formulario
             >
               Limpiar
             </Button>

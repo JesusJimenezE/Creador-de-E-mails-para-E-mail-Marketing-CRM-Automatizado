@@ -7,129 +7,108 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from './../components/firebaseconfig';
 
 export const Email = () => {
-  // Estados para almacenar y manejar los datos del formulario y la audiencia
-  const [genero, setGenero] = useState(''); // Almacena el género seleccionado
-  const [edad, setEdad] = useState({ min: '', max: '' }); // Almacena el rango de edad mínimo y máximo
-  const [ocupacion, setOcupacion] = useState(''); // Almacena la ocupación seleccionada
-  const [ocupacionesDisponible, setOcupacionesDisponibles] = useState([]); // Lista de ocupaciones disponibles
-  const [cargando, setCargando] = useState(false); // Estado para indicar si se está enviando el correo
-  const [asunto, setAsunto] = useState(''); // Almacena el asunto del correo
-  const [contenido, setContenido] = useState(''); // Almacena el contenido del correo
+  // Estados para manejar los valores del formulario y otros datos relevantes
+  const [genero, setGenero] = useState('');
+  const [edad, setEdad] = useState({ min: '', max: '' });
+  const [ocupacion, setOcupacion] = useState('');
+  const [ocupacionesDisponible, setOcupacionesDisponibles] = useState([]);
+  const [cargando, setCargando] = useState(false);
+  const [asunto, setAsunto] = useState('');
+  const [contenido, setContenido] = useState('');
 
-  // useEffect para cargar las ocupaciones desde Firestore cuando el componente se monta
+  // useEffect para cargar las ocupaciones desde Firestore cuando se monta el componente
   useEffect(() => {
     const obtenerOcupaciones = async () => {
-      const ocupaciones = []; // Array para almacenar las ocupaciones sin duplicados
-      const q = query(collection(db, 'contactos')); // Definimos la consulta a la colección 'contactos'
-      const querySnapshot = await getDocs(q); // Ejecutamos la consulta y obtenemos los resultados
+      const ocupaciones = [];
+      const q = query(collection(db, 'contactos'));
+      const querySnapshot = await getDocs(q);
 
-      // Recorremos los documentos obtenidos de Firestore
       querySnapshot.forEach((doc) => {
-        const data = doc.data(); // Obtenemos los datos de cada documento
+        const data = doc.data();
         if (data.ocupacion && !ocupaciones.includes(data.ocupacion)) {
-          ocupaciones.push(data.ocupacion); // Agregamos ocupaciones únicas al array
+          ocupaciones.push(data.ocupacion); // Agrega ocupaciones únicas
         }
       });
 
-      setOcupacionesDisponibles(ocupaciones); // Guardamos las ocupaciones en el estado
+      setOcupacionesDisponibles(ocupaciones); // Actualiza el estado con la lista de ocupaciones
     };
 
-    obtenerOcupaciones(); // Ejecutamos la función
+    obtenerOcupaciones(); // Llama a la función para obtener las ocupaciones
   }, []);
 
-  // Función para enviar correos
+  // Función para enviar correos electrónicos al servidor que procesará y enviará los correos mediante SendGrid
   const EnvioEmails = async (correo) => {
     try {
       const response = await fetch('http://localhost:5000/enviar-correo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          to: correo, // Destinatario del correo
-          subject: asunto, // Asunto del correo
-          text: contenido, // Contenido del correo
+          to: correo, // Dirección del destinatario
+          subject: asunto, // Asunto del correo, puedes seguir usándolo en los encabezados
+          text: contenido, // El texto del correo, que también puede ir en la plantilla
+          template_id: 'd-87fa19196a86427a83a7e38da17e5454', // ID de tu plantilla en SendGrid
+
         }),
+
       });
 
-      if (!response.ok) { // Verifica si hubo un error en la respuesta
+      if (!response.ok) { // Si la respuesta no es exitosa, muestra un error
         const errorData = await response.json();
         throw new Error('Error al enviar el correo: ' + (errorData.message || response.statusText));
       }
 
-      console.log(`Correo enviado a: ${correo}`); // Confirma el envío en la consola
+      alert(`Correo enviado a: ${correo}`); // Muestra una alerta de éxito
     } catch (error) {
-      console.error(error); // Muestra el error en la consola
+      console.error(error);
+      alert('Hubo un error al enviar el correo. Por favor intenta de nuevo.');
     }
   };
 
-  // Función para buscar correos en Firestore aplicando los filtros seleccionados
+  // Función para buscar correos electrónicos en Firestore aplicando los filtros seleccionados
   const buscarCorreos = async () => {
-    setCargando(true); // Activa el estado de carga
-    try {
-      const contactosRef = collection(db, 'contactos'); // Referencia a la colección 'contactos'
-      let filtros = []; // Array para almacenar los filtros aplicados
+    if (!asunto || !contenido) {
+      alert('Por favor, completa el asunto y el contenido del correo.');
+      return;
+    }
 
-      // Aplicar los filtros de género y ocupación si están seleccionados
+    setCargando(true); // Muestra estado de carga mientras se buscan correos
+    try {
+      const contactosRef = collection(db, 'contactos');
+      let filtros = []; // Arreglo de filtros para la consulta
+
       if (genero && genero !== 'Todos') filtros.push(where('genero', '==', genero));
       if (ocupacion && ocupacion !== 'Todos') filtros.push(where('ocupacion', '==', ocupacion));
 
-      // Convertir las edades a números e implementar lógica de validación
       const minEdad = parseInt(edad.min) || 0;
       const maxEdad = parseInt(edad.max) || 100;
-      if (minEdad > maxEdad) { // Verifica que el rango de edad sea válido
+      if (minEdad > maxEdad) {
         console.error('Rango de edad inválido.');
-        return; // Finaliza la función si el rango es inválido
+        return;
       }
 
-      // Aplicar los filtros de edad mínima y máxima
       if (edad.min) filtros.push(where('edad', '>=', minEdad));
       if (edad.max) filtros.push(where('edad', '<=', maxEdad));
 
-      // Realizar la consulta con los filtros y obtener los correos
       const q = filtros.length ? query(contactosRef, ...filtros) : query(contactosRef);
       const querySnapshot = await getDocs(q);
 
-      if (!querySnapshot.empty) { // Si se encuentran resultados en la consulta
-        const correos = querySnapshot.docs.map((doc) => doc.data().correo); // Obtener correos de los documentos
-        await Promise.all(correos.map((correo) => EnvioEmails(correo))); // Enviar correo a cada destinatario
+      if (!querySnapshot.empty) {
+        const correos = querySnapshot.docs.map((doc) => doc.data().correo); // Extrae los correos electrónicos de los resultados
+        await Promise.all(correos.map((correo) => EnvioEmails(correo)));
         console.log('Correos encontrados:', correos);
       } else {
         console.log('No se encontraron correos que coincidan con los filtros.');
       }
     } catch (error) {
-      console.error('Error al buscar correos:', error); // Muestra el error en la consola
+      console.error('Error al buscar correos:', error);
     } finally {
-      setCargando(false); // Desactiva el estado de carga
-    }
-  };
-
-  // Función para enviar un correo de prueba
-  const enviarCorreoPrueba = async () => {
-    try {
-      const response = await fetch('http://localhost:5000/enviar-correo', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          to: 'denissjimenez0622@gmail.com',
-          subject: 'Prueba de envío desde botón',
-          text: 'Este es un correo de prueba desde el botón de prueba por parte de Email.',
-        }),
-      });
-
-      if (!response.ok) { // Verifica si hubo un error en la respuesta
-        const errorData = await response.json();
-        throw new Error('Error al enviar el correo de prueba: ' + (errorData.message || response.statusText));
-      }
-
-      alert('Correo de prueba enviado exitosamente.'); // Muestra una alerta de éxito
-    } catch (error) {
-      console.error(error); // Muestra el error en la consola
-      alert('Error al enviar el correo de prueba.'); // Muestra una alerta de error
+      setCargando(false); // Oculta el estado de carga al finalizar la búsqueda
     }
   };
 
   return (
     <div>
-      <Cabe /> {/* Cabecera personalizada */}
+      <Cabe /> {/* Componente de cabecera */}
       <div className={styles.EmailPage}>
         <div className={styles.FormContainer}>
           <Form>
@@ -190,12 +169,10 @@ export const Email = () => {
             </Button>
           </Form>
         </div>
-        <Button onClick={enviarCorreoPrueba}>Enviar Correo de Prueba</Button>
       </div>
-      <Piep /> {/* Pie de página personalizado */}
+      <Piep /> {/* Componente de pie de página */}
     </div>
   );
 };
-
 
 export default Email;

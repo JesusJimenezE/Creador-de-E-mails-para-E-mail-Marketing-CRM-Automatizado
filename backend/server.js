@@ -1,54 +1,63 @@
 // Importamos los módulos necesarios
-const express = require('express');
-const cors = require('cors'); // Permite solicitudes desde otros dominios (CORS)
-const sgMail = require('@sendgrid/mail'); // Importa SendGrid para envío de correos
+const express = require('express'); // Framework para crear el servidor de aplicaciones web
+const cors = require('cors'); // Middleware que permite realizar solicitudes entre diferentes dominios (CORS)
+const sgMail = require('@sendgrid/mail'); // Librería que facilita el envío de correos electrónicos usando la API de SendGrid
 
 // Configuración de las variables de entorno
-require('dotenv').config();
+require('dotenv').config(); // Carga las variables de entorno definidas en el archivo .env para usar en el servidor
 
-// Configura la API Key de SendGrid desde el archivo .env
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+// Configura la API Key de SendGrid utilizando la clave guardada en el archivo .env
+sgMail.setApiKey(process.env.SENDGRID_API_KEY); // Establece la API Key para poder interactuar con la API de SendGrid
 
 // Inicializa la aplicación de Express
-const app = express();
+const app = express(); // Crea una instancia de la aplicación Express
 
-// Habilita CORS para permitir solicitudes de diferentes dominios
-app.use(cors());
+// Habilita CORS para permitir solicitudes desde otros dominios (servidores)
+app.use(cors()); // Este middleware permite solicitudes desde cualquier dominio, lo cual es útil para el frontend
 
-// Middleware para permitir que el servidor reciba datos en formato JSON
-app.use(express.json());
+// Middleware para parsear el cuerpo de las solicitudes HTTP en formato JSON
+app.use(express.json()); // Permite que el servidor pueda procesar las solicitudes que contengan datos JSON
 
-// Ruta principal para verificar el estado del servidor
+// Ruta principal del servidor (GET /)
 app.get('/', (req, res) => {
-  res.send('Bienvenido al servidor de envío de correos'); // Muestra un mensaje al acceder a la ruta principal
+  res.send('Bienvenido al servidor de envío de correos'); // Responde con un mensaje de bienvenida al acceder a la raíz
 });
 
 // Define una ruta para el envío de correos (POST /enviar-correo)
 app.post('/enviar-correo', async (req, res) => {
-  // Extrae los datos enviados desde el frontend en la solicitud
-  const { to, subject, text } = req.body;
+  // Extrae los datos enviados desde el frontend en el cuerpo de la solicitud
+  const { to, template_id, subject, text } = req.body;
 
-  // Configura el mensaje de correo con los datos recibidos
+  // Configura el mensaje de correo utilizando los datos extraídos del cuerpo de la solicitud
   const msg = {
-    to,  // Correo del destinatario, obtenido desde el frontend
-    from: 'jesusjimenez2620@gmail.com', // Correo del remitente (verificado en SendGrid)
-    subject, // Asunto del correo
-    text, // Contenido en texto plano
-    html: `<strong>${text}</strong>`, // Contenido en formato HTML, opcionalmente el mismo texto en negrita
+    to,  // Dirección de correo del destinatario, proporcionada desde el frontend
+    from: 'jesusjimenez2620@gmail.com', // Dirección de correo del remitente, que debe estar verificada en SendGrid
+    subject, // El asunto del correo 
+    text, // El texto del correo
+    templateId: template_id, // ID de la plantilla de correo en SendGrid para usar la plantilla definida
+    
   };
 
   try {
-    // Envía el correo utilizando SendGrid
-    await sgMail.send(msg);
-    res.status(200).json({ message: 'Correo enviado exitosamente.' }); // Responde con éxito
+    // Envía el correo utilizando la API de SendGrid
+    await sgMail.send(msg); // La función send de sgMail envía el correo utilizando los datos configurados
+
+    // Si el correo se envía correctamente, responde con un mensaje de éxito (código 200)
+    res.status(200).json({ message: 'Correo enviado exitosamente.' });
+    console.log('Asunto recibido:', subject);
   } catch (error) {
-    console.error('Error al enviar el correo:', error); // Muestra cualquier error en la consola
-    res.status(500).json({ message: 'Error al enviar el correo.', error }); // Responde con error
+    // Si ocurre un error al enviar el correo, lo muestra en la consola
+    console.error('Error al enviar el correo:', error);
+
+    // Responde con un mensaje de error y el detalle del mismo (código 500)
+    res.status(500).json({ message: 'Error al enviar el correo.', error });
   }
 });
 
 // Configuración del puerto en el que el servidor escuchará las solicitudes
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000; // Usa el puerto definido en las variables de entorno o el 5000 por defecto
+
+// Hace que el servidor comience a escuchar en el puerto especificado
 app.listen(PORT, () => {
-  console.log(`Servidor escuchando en http://localhost:${PORT}`); // Muestra el puerto donde el servidor está activo
+  console.log(`Servidor escuchando en http://localhost:${PORT}`); // Muestra un mensaje en la consola cuando el servidor esté activo
 });
