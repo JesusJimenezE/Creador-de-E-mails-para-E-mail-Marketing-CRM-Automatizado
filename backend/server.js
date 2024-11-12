@@ -16,7 +16,7 @@ const app = express(); // Crea una instancia de la aplicación Express
 app.use(cors()); // Este middleware permite solicitudes desde cualquier dominio, lo cual es útil para el frontend
 
 // Middleware para parsear el cuerpo de las solicitudes HTTP en formato JSON
-app.use(express.json()); // Permite que el servidor pueda procesar las solicitudes que contengan datos JSON
+app.use(express.json({ limit: '10mb' })); // Permite que el servidor pueda procesar las solicitudes que contengan datos JSON
 
 // Ruta principal del servidor (GET /)
 app.get('/', (req, res) => {
@@ -26,16 +26,27 @@ app.get('/', (req, res) => {
 // Define una ruta para el envío de correos (POST /enviar-correo)
 app.post('/enviar-correo', async (req, res) => {
   // Extrae los datos enviados desde el frontend en el cuerpo de la solicitud
-  const { to, template_id, subject, text } = req.body;
+  const { to, templateId, subject, text, fileContent, fileName } = req.body;
 
   // Configura el mensaje de correo utilizando los datos extraídos del cuerpo de la solicitud
   const msg = {
     to,  // Dirección de correo del destinatario, proporcionada desde el frontend
-    from: 'jesusjimenez2620@gmail.com', // Dirección de correo del remitente, que debe estar verificada en SendGrid
-    subject, // El asunto del correo 
-    text, // El texto del correo
-    templateId: template_id, // ID de la plantilla de correo en SendGrid para usar la plantilla definida
-    
+    from: 'jesusjimenez2620@gmail.com',
+    templateId, // ID de la plantilla de correo en SendGrid
+    dynamic_template_data: {
+      subject, // Envía el asunto como variable de la plantilla
+      text,    // Envía el texto que reemplazará {{text}} en la plantilla
+    },
+    attachments: fileContent
+      ? [
+          {
+            content: fileContent, // Contenido del archivo en Base64
+            filename: fileName, // Nombre del archivo
+            type: 'application/octet-stream', // Tipo MIME (puede cambiar según el tipo de archivo)
+            disposition: 'attachment', // Define que es un adjunto
+          },
+        ]
+      : [],
   };
 
   try {
@@ -45,6 +56,8 @@ app.post('/enviar-correo', async (req, res) => {
     // Si el correo se envía correctamente, responde con un mensaje de éxito (código 200)
     res.status(200).json({ message: 'Correo enviado exitosamente.' });
     console.log('Asunto recibido:', subject);
+    console.log('texto recibido:', text);
+    console.log('plantilla recibida:', templateId);
   } catch (error) {
     // Si ocurre un error al enviar el correo, lo muestra en la consola
     console.error('Error al enviar el correo:', error);

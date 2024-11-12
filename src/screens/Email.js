@@ -15,6 +15,7 @@ export const Email = () => {
   const [cargando, setCargando] = useState(false);
   const [asunto, setAsunto] = useState('');
   const [contenido, setContenido] = useState('');
+  const [archivo, setArchivo] = useState(null);
 
   // useEffect para cargar las ocupaciones desde Firestore cuando se monta el componente
   useEffect(() => {
@@ -36,9 +37,22 @@ export const Email = () => {
     obtenerOcupaciones(); // Llama a la función para obtener las ocupaciones
   }, []);
 
+  // Convierte archivo a Base64 para enviarlo como adjunto
+  const convertirArchivoABase64 = (archivo) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(',')[1]); // Elimina el prefijo de Base64
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(archivo);
+    });
+  };
+
   // Función para enviar correos electrónicos al servidor que procesará y enviará los correos mediante SendGrid
   const EnvioEmails = async (correo) => {
     try {
+
+      const archivoBase64 = archivo ? await convertirArchivoABase64(archivo) : null;
+
       const response = await fetch('http://localhost:5000/enviar-correo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -46,7 +60,9 @@ export const Email = () => {
           to: correo, // Dirección del destinatario
           subject: asunto, // Asunto del correo, puedes seguir usándolo en los encabezados
           text: contenido, // El texto del correo, que también puede ir en la plantilla
-          template_id: 'd-87fa19196a86427a83a7e38da17e5454', // ID de tu plantilla en SendGrid
+          templateId: 'd-87fa19196a86427a83a7e38da17e5454', // ID de tu plantilla en SendGrid
+          fileContent: archivoBase64,
+          fileName: archivo ? archivo.name : '',
 
         }),
 
@@ -162,6 +178,11 @@ export const Email = () => {
               <Input
                 id="contenido" name="contenido" type="textarea" value={contenido} onChange={(e) => setContenido(e.target.value)}
               />
+            </FormGroup>
+
+            <FormGroup>
+              <Label for="archivo">Adjuntar Archivo:</Label>
+              <Input id="archivo" name="archivo" type="file" onChange={(e) => setArchivo(e.target.files[0])} />
             </FormGroup>
 
             <Button onClick={buscarCorreos} disabled={cargando}>
