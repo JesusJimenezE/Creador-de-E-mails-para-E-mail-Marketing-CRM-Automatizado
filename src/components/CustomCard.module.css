@@ -1,24 +1,108 @@
+/* Contenedor para el campo de búsqueda y el botón de agregar en disposición horizontal */
+.search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem; /* Espacio entre el campo de búsqueda y el botón */
+  margin-top: 1rem;
+  flex-wrap: wrap; /* Permite que se ajuste en pantallas pequeñas */
+}
+
+/* Estilo para el campo de búsqueda */
+.searchInput {
+  width: 100%;
+  max-width: 300px; /* Ancho máximo del campo de búsqueda */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #1A2B61; /* Borde azul cuando está en foco */
+}
+
+/* Estilo para el botón de agregar */
+.agre {
+  background-color: #1A2B61;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: bold; /* Texto del botón en negrita */
+}
+
+.agre:hover {
+  background-color: #45a049;
+}
+
+/* Contenedor para los cards */
 .card-container {
-  display: flex; /* Usamos flexbox para alinear los cards */
-  gap: 1rem; /* Espacio entre los cards */
-  justify-content: center; /* Centra los cards horizontalmente */
-  flex-wrap: wrap; /* Permite que los cards se muevan a la siguiente línea si el espacio es insuficiente */
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 1rem;
+  margin-top: 1rem;
 }
 
 .card {
-  width: 18rem; /* Ancho fijo para los cards, para mantener consistencia en el diseño */
+  width: 18rem;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
 }
 
 .eliminar {
-  background-color: #1A2B61; /* Color de fondo del botón */
-  color: white; /* Color del texto del botón */
-  border: none; /* Eliminamos cualquier borde predeterminado */
-  padding: 10px 20px; /* Espaciado interno para hacer el botón más grande y clicable */
-  border-radius: 5px; /* Bordes redondeados para un estilo más suave */
-  cursor: pointer; /* Cambiamos el cursor a pointer para indicar que es un botón clicable */
-  transition: background-color 0.3s ease; /* Transición suave al cambiar el color de fondo */
-} 
+  background-color: #1A2B61;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  font-weight: bold;
+  text-align: center;
+}
 
 .eliminar:hover {
-  background-color: #d32f2f; /* Color de fondo cuando el usuario pasa el cursor sobre el botón */
+  background-color: #d32f2f;
+}
+
+/* Estilo para la paginación */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+  gap: 0.5rem;
+}
+
+.pageButton {
+  background-color: #1A2B61;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pageButton:hover {
+  background-color: #B3B8CA;
+}
+
+.pageButton:focus {
+  outline: none;
+  background-color: #8d8f97;
+  
 }

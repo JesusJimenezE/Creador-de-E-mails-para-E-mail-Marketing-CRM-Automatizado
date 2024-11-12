@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Input, Label, Form, FormGroup } from 'reactstrap';
-import { Cabe } from '../components/Cabe';
-import { Piep } from '../components/Piep';
-import styles from './Email.module.css';
+import { Cabe } from '../components/Cabe'; // Componente de cabecera
+import { Piep } from '../components/Piep'; // Componente de pie de página
+import styles from './Email.module.css'; // Estilos CSS específicos del módulo Email
 import { collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from './../components/firebaseconfig';
+import { db } from './../components/firebaseconfig'; // Configuración de Firebase
 
 export const Email = () => {
-  // Estados para manejar los valores del formulario y otros datos relevantes
+  // Estados para manejar los valores del formulario y otros datos
   const [genero, setGenero] = useState('');
   const [edad, setEdad] = useState({ min: '', max: '' });
   const [ocupacion, setOcupacion] = useState('');
@@ -17,13 +17,14 @@ export const Email = () => {
   const [contenido, setContenido] = useState('');
   const [archivo, setArchivo] = useState(null);
 
-  // useEffect para cargar las ocupaciones desde Firestore cuando se monta el componente
+  // useEffect para cargar las ocupaciones desde Firestore al montar el componente
   useEffect(() => {
     const obtenerOcupaciones = async () => {
       const ocupaciones = [];
-      const q = query(collection(db, 'contactos'));
+      const q = query(collection(db, 'contactos')); // Consulta de la colección "contactos"
       const querySnapshot = await getDocs(q);
 
+      // Recorre cada documento en la colección
       querySnapshot.forEach((doc) => {
         const data = doc.data();
         if (data.ocupacion && !ocupaciones.includes(data.ocupacion)) {
@@ -31,13 +32,13 @@ export const Email = () => {
         }
       });
 
-      setOcupacionesDisponibles(ocupaciones); // Actualiza el estado con la lista de ocupaciones
+      setOcupacionesDisponibles(ocupaciones); // Actualiza el estado con las ocupaciones obtenidas
     };
 
     obtenerOcupaciones(); // Llama a la función para obtener las ocupaciones
   }, []);
 
-  // Convierte archivo a Base64 para enviarlo como adjunto
+  // Convierte archivo a Base64 para adjuntarlo en el envío de correo
   const convertirArchivoABase64 = (archivo) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -47,28 +48,27 @@ export const Email = () => {
     });
   };
 
-  // Función para enviar correos electrónicos al servidor que procesará y enviará los correos mediante SendGrid
+  // Función para enviar correos electrónicos al servidor que usará SendGrid
   const EnvioEmails = async (correo) => {
     try {
+      const archivoBase64 = archivo ? await convertirArchivoABase64(archivo) : null; // Convierte archivo si existe
 
-      const archivoBase64 = archivo ? await convertirArchivoABase64(archivo) : null;
-
+      // Realiza la solicitud POST al servidor para enviar el correo
       const response = await fetch('http://localhost:5000/enviar-correo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          to: correo, // Dirección del destinatario
-          subject: asunto, // Asunto del correo, puedes seguir usándolo en los encabezados
-          text: contenido, // El texto del correo, que también puede ir en la plantilla
-          templateId: 'd-87fa19196a86427a83a7e38da17e5454', // ID de tu plantilla en SendGrid
+          to: correo,
+          subject: asunto, 
+          text: contenido,
+          templateId: 'd-87fa19196a86427a83a7e38da17e5454', // ID de plantilla en SendGrid
           fileContent: archivoBase64,
           fileName: archivo ? archivo.name : '',
-
         }),
-
       });
 
-      if (!response.ok) { // Si la respuesta no es exitosa, muestra un error
+      // Verifica si la solicitud fue exitosa
+      if (!response.ok) { 
         const errorData = await response.json();
         throw new Error('Error al enviar el correo: ' + (errorData.message || response.statusText));
       }
@@ -80,21 +80,22 @@ export const Email = () => {
     }
   };
 
-  // Función para buscar correos electrónicos en Firestore aplicando los filtros seleccionados
+  // Función para buscar correos electrónicos en Firestore aplicando filtros
   const buscarCorreos = async () => {
     if (!asunto || !contenido) {
       alert('Por favor, completa el asunto y el contenido del correo.');
       return;
     }
 
-    setCargando(true); // Muestra estado de carga mientras se buscan correos
+    setCargando(true); // Muestra estado de carga durante la búsqueda
     try {
       const contactosRef = collection(db, 'contactos');
-      let filtros = []; // Arreglo de filtros para la consulta
+      let filtros = []; // Array de filtros para la consulta
 
       if (genero && genero !== 'Todos') filtros.push(where('genero', '==', genero));
       if (ocupacion && ocupacion !== 'Todos') filtros.push(where('ocupacion', '==', ocupacion));
 
+      // Configura el rango de edad
       const minEdad = parseInt(edad.min) || 0;
       const maxEdad = parseInt(edad.max) || 100;
       if (minEdad > maxEdad) {
@@ -105,12 +106,14 @@ export const Email = () => {
       if (edad.min) filtros.push(where('edad', '>=', minEdad));
       if (edad.max) filtros.push(where('edad', '<=', maxEdad));
 
+      // Ejecuta la consulta en Firebase Firestore con los filtros aplicados
       const q = filtros.length ? query(contactosRef, ...filtros) : query(contactosRef);
       const querySnapshot = await getDocs(q);
 
       if (!querySnapshot.empty) {
-        const correos = querySnapshot.docs.map((doc) => doc.data().correo); // Extrae los correos electrónicos de los resultados
-        await Promise.all(correos.map((correo) => EnvioEmails(correo)));
+        // Extrae los correos de los contactos encontrados
+        const correos = querySnapshot.docs.map((doc) => doc.data().correo);
+        await Promise.all(correos.map((correo) => EnvioEmails(correo))); // Envía correos en paralelo
         console.log('Correos encontrados:', correos);
       } else {
         console.log('No se encontraron correos que coincidan con los filtros.');
@@ -118,7 +121,7 @@ export const Email = () => {
     } catch (error) {
       console.error('Error al buscar correos:', error);
     } finally {
-      setCargando(false); // Oculta el estado de carga al finalizar la búsqueda
+      setCargando(false); // Oculta el estado de carga al finalizar
     }
   };
 
