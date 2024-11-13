@@ -61,7 +61,7 @@ export const Email = () => {
           to: correo,
           subject: asunto,
           text: contenido,
-          templateId: 'd-87fa19196a86427a83a7e38da17e5454', // ID de plantilla en SendGrid
+          templateId: 'd-bf33b512e5d1446596460967f0ca5dda', // ID de plantilla en SendGrid
           fileContent: archivoBase64,
           fileName: archivo ? archivo.name : '',
         }),
