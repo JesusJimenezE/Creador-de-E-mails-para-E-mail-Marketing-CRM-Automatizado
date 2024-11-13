@@ -65,3 +65,16 @@
     background-color: #d32f2f;
     /* Color de fondo al pasar el ratón sobre el botón "Limpiar" */
 }
+
+/* Contenedor de los inputs de edad en una sola línea */
+.edadContainer {
+    display: flex;
+    justify-content: space-between; /* Espacio entre los inputs */
+    gap: 1rem; /* Espacio entre los inputs */
+  }
+  
+  /* Estilos para los inputs de edad */
+  .edadInput {
+    width: 45%; /* Ajusta el tamaño de los inputs */
+  }
+  

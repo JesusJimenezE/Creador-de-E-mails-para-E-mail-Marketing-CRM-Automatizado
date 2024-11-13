@@ -59,7 +59,7 @@ export const Email = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           to: correo,
-          subject: asunto, 
+          subject: asunto,
           text: contenido,
           templateId: 'd-87fa19196a86427a83a7e38da17e5454', // ID de plantilla en SendGrid
           fileContent: archivoBase64,
@@ -68,7 +68,7 @@ export const Email = () => {
       });
 
       // Verifica si la solicitud fue exitosa
-      if (!response.ok) { 
+      if (!response.ok) {
         const errorData = await response.json();
         throw new Error('Error al enviar el correo: ' + (errorData.message || response.statusText));
       }
@@ -153,15 +153,18 @@ export const Email = () => {
 
             <FormGroup>
               <Label for="edad">Rango de edad:</Label>
-              <div>
+              <div className={styles.edadContainer}> {/* Clase añadida para el contenedor */}
                 <Input
                   type="number" placeholder="Edad mínima" value={edad.min} onChange={(e) => setEdad({ ...edad, min: e.target.value })}
+                  className={styles.edadInput}  // Clase adicional para los inputs
                 />
                 <Input
                   type="number" placeholder="Edad máxima" value={edad.max} onChange={(e) => setEdad({ ...edad, max: e.target.value })}
+                  className={styles.edadInput}  // Clase adicional para los inputs
                 />
               </div>
             </FormGroup>
+
 
             <FormGroup>
               <Label for="ocupacion">Ocupación:</Label>
@@ -188,7 +191,7 @@ export const Email = () => {
               <Input id="archivo" name="archivo" type="file" onChange={(e) => setArchivo(e.target.files[0])} />
             </FormGroup>
 
-            <Button onClick={buscarCorreos} disabled={cargando}>
+            <Button className={styles.env} onClick={buscarCorreos} disabled={cargando}>
               {cargando ? 'Enviando...' : 'Enviar Correo'}
             </Button>
           </Form>

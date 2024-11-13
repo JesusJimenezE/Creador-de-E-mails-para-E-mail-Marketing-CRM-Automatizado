@@ -1,139 +1,124 @@
 import React, { useEffect, useState } from 'react';
-import { Card as ReactstrapCard, CardBody, CardTitle, CardText, Button } from 'reactstrap'; // Importamos componentes de Reactstrap para el diseño de tarjetas
-import styles from './CustomCard.module.css'; // Importamos estilos personalizados para la tarjeta desde un archivo CSS
+import { Table, Button } from 'reactstrap'; // Usamos componentes de Reactstrap para estilizar la tabla y los botones
 import { db } from '../components/firebaseconfig'; // Importamos la configuración de Firebase
-import { useNavigate } from 'react-router-dom'; // useNavigate para la navegación entre páginas
-import { collection, getDocs, doc, deleteDoc } from 'firebase/firestore'; // Métodos de Firestore para leer y eliminar documentos
+import { useNavigate } from 'react-router-dom'; // Hook para redireccionar a otras rutas
+import { collection, getDocs, doc, deleteDoc } from 'firebase/firestore'; // Funciones de Firestore para obtener y eliminar datos
+import styles from './CustomCard.module.css'; // Importamos estilos personalizados desde un archivo CSS
 
-// Componente principal para mostrar tarjetas de contactos
 export const CustomCard = () => {
-    // Estado para almacenar los contactos obtenidos de Firestore
+    // Estado para almacenar los contactos obtenidos de Firebase
     const [contactos, setContactos] = useState([]);
-    // Estado para rastrear la página actual en la paginación
+    // Estado para la paginación, indicando la página actual
     const [currentPage, setCurrentPage] = useState(1);
-    // Número de contactos por página
-    const itemsPerPage = 64;
-    // Estado para el término de búsqueda en el input
+    // Número de elementos a mostrar por página
+    const itemsPerPage = 10;
+    // Estado para almacenar el término de búsqueda ingresado por el usuario
     const [searchTerm, setSearchTerm] = useState('');
-    // Estado para controlar la visibilidad de detalles de cada tarjeta
-    const [showDetails, setShowDetails] = useState({});
 
-    const navigate = useNavigate(); // Para redirigir a otras rutas
+    const navigate = useNavigate(); // Hook de navegación para redirigir entre rutas
 
-    // Redirige a la página para agregar un nuevo contacto
+    // Función que redirige a la página para agregar un nuevo contacto
     const handleButtonClick = () => {
         navigate('/nuecont');
     };
 
-    // Carga los contactos desde Firestore cuando el componente se monta
+    // Hook de efecto que se ejecuta al montar el componente para cargar los contactos desde Firestore
     useEffect(() => {
         const cargarContactos = async () => {
             try {
-                // Obtiene todos los documentos de la colección 'contactos' en Firestore
+                // Obtenemos los documentos de la colección 'contactos'
                 const querySnapshot = await getDocs(collection(db, 'contactos'));
-                // Mapea los documentos obtenidos, agregando el ID y guardándolos en el estado
+                // Mapeamos los documentos a un array de objetos con id y datos de cada contacto
                 const datos = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-                setContactos(datos);
+                setContactos(datos); // Guardamos los datos en el estado
             } catch (error) {
-                console.error('Error al obtener los datos de Firestore: ', error); // Muestra el error si ocurre
+                console.error('Error al obtener los datos de Firestore: ', error);
             }
         };
+        cargarContactos(); // Llamamos a la función de carga
+    }, []);
 
-        cargarContactos(); // Llama a la función para cargar los contactos
-    }, []); // Se ejecuta solo una vez cuando el componente se monta
-
-    // Elimina un contacto por su ID
+    // Función para eliminar un contacto por su ID
     const handleDelete = async (id) => {
         try {
-            // Elimina el documento de Firestore correspondiente al ID dado
+            // Eliminamos el documento de Firestore
             await deleteDoc(doc(db, 'contactos', id));
-            // Actualiza el estado eliminando el contacto del array sin recargar la página
+            // Actualizamos el estado para reflejar el cambio, filtrando el contacto eliminado
             setContactos(contactos.filter((contacto) => contacto.id !== id));
             alert('Contacto eliminado exitosamente'); // Mensaje de confirmación
         } catch (error) {
-            console.error('Error al eliminar el contacto: ', error); // Muestra el error si ocurre
+            console.error('Error al eliminar el contacto: ', error);
         }
     };
 
-    // Alterna la visibilidad de los detalles de una tarjeta al hacer clic en ella
-    const toggleDetails = (id) => {
-        setShowDetails((prevDetails) => ({
-            ...prevDetails,
-            [id]: !prevDetails[id] // Cambia el valor booleano de `showDetails` para el contacto específico
-        }));
-    };
-
-    // Filtra los contactos en función del término de búsqueda
+    // Filtramos los contactos según el término de búsqueda
     const filteredContactos = contactos.filter((contacto) =>
         contacto.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
         contacto.ocupacion.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    // Cálculo de los índices para la paginación
+    // Determinamos los índices para la paginación
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    // Contactos actuales a mostrar en la página actual
+    // Obtenemos los contactos de la página actual
     const currentItems = filteredContactos.slice(indexOfFirstItem, indexOfLastItem);
 
-    // Cambia la página actual al hacer clic en un botón de paginación
+    // Función para cambiar de página en la paginación
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     return (
         <div>
-            {/* Contenedor de la barra de búsqueda y el botón "Agregar contacto" */}
+            {/* Contenedor de búsqueda y botón de agregar */}
             <div className={styles['search-container']}>
-                {/* Input de búsqueda */}
                 <input
                     type="text"
                     placeholder="Buscar por nombre u ocupación..."
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)} // Actualiza el término de búsqueda
+                    onChange={(e) => setSearchTerm(e.target.value)} // Actualizamos el término de búsqueda
                     className={styles.searchInput}
                 />
-
-                {/* Botón "Agregar contacto" */}
                 <Button className={styles.agre} onClick={handleButtonClick}>
                     Agregar contacto
                 </Button>
             </div>
 
-            {/* Contenedor principal de las tarjetas de contacto */}
-            <div className={styles['card-container']}>
-                {/* Renderiza cada tarjeta en la página actual */}
-                {currentItems.map((contacto) => (
-                    <ReactstrapCard 
-                        key={contacto.id} 
-                        className={styles['card']}
-                        onClick={() => toggleDetails(contacto.id)} // Alterna la visibilidad de los detalles
-                    >
-                        <CardBody>
-                            {/* Título de la tarjeta: nombre del contacto */}
-                            <CardTitle tag="h5">{contacto.nombre}</CardTitle>
-                            {/* Condición para mostrar detalles adicionales solo si `showDetails` es true */}
-                            {showDetails[contacto.id] && (
-                                <CardText>
-                                    <strong>Edad:</strong> {contacto.edad}<br />
-                                    <strong>Género:</strong> {contacto.genero}<br />
-                                    <strong>Correo:</strong> {contacto.correo}<br />
-                                    <strong>Número:</strong> {contacto.numero}<br />
-                                    <strong>Ocupación:</strong> {contacto.ocupacion}
-                                </CardText>
-                            )}
-                            {/* Botón "Eliminar" */}
-                            <Button className={styles.eliminar} onClick={(e) => {
-                                e.stopPropagation(); // Evita que el clic en "Eliminar" active el evento de `onClick` en la tarjeta
-                                handleDelete(contacto.id); // Llama a la función para eliminar el contacto
-                            }}>
-                                Eliminar
-                            </Button>
-                        </CardBody>
-                    </ReactstrapCard>
-                ))}
-            </div>
+            {/* Tabla estilizada para mostrar los contactos */}
+            <Table bordered hover className={styles['table-container']}>
+                <thead className={styles['table-header']}>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Edad</th>
+                        <th>Género</th>
+                        <th>Correo</th>
+                        <th>Número</th>
+                        <th>Ocupación</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {/* Mapeamos y mostramos cada contacto en una fila */}
+                    {currentItems.map((contacto) => (
+                        <tr key={contacto.id} className={styles['table-row']}>
+                            <td>{contacto.nombre}</td>
+                            <td>{contacto.edad}</td>
+                            <td>{contacto.genero}</td>
+                            <td>{contacto.correo}</td>
+                            <td>{contacto.numero}</td>
+                            <td>{contacto.ocupacion}</td>
+                            <td>
+                                {/* Botón para eliminar el contacto */}
+                                <Button className={styles['table-eliminar']} onClick={() => handleDelete(contacto.id)}>
+                                    Eliminar
+                                </Button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </Table>
 
-            {/* Contenedor de paginación */}
+            {/* Componente de paginación */}
             <div className={styles.pagination}>
-                {/* Genera un botón por cada página */}
+                {/* Botones para navegar entre páginas */}
                 {[...Array(Math.ceil(filteredContactos.length / itemsPerPage))].map((_, index) => (
                     <button key={index} onClick={() => paginate(index + 1)} className={styles.pageButton}>
                         {index + 1}
