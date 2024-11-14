@@ -31,7 +31,7 @@ app.post('/enviar-correo', async (req, res) => {
   // Configura el mensaje de correo utilizando los datos extraídos del cuerpo de la solicitud
   const msg = {
     to,  // Dirección de correo del destinatario, proporcionada desde el frontend
-    from: 'jesusjimenez2620@gmail.com',
+    from: 'maestriaennegociosdigitales@modelodenegocios.com',
     templateId, // ID de la plantilla de correo en SendGrid
     dynamic_template_data: {
       subject, // Envía el asunto como variable de la plantilla
