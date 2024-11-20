@@ -14,7 +14,7 @@ export const Contac = () => {
   // Estado para la paginación, indicando la página actual
   const [currentPage, setCurrentPage] = useState(1);
   // Número de elementos a mostrar por página
-  const itemsPerPage = 10;
+  const itemsPerPage = 30;
   // Estado para almacenar el término de búsqueda ingresado por el usuario
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -74,7 +74,7 @@ export const Contac = () => {
       {/* Componente de la cabecera */}
       <Cabe />
 
-      {/* Componente que muestra las tarjetas de contacto */}
+      {/* Tabla donde muestra los contactos */}
       <div>
             {/* Contenedor de búsqueda y botón de agregar */}
             <div className={styles['search-container']}>
