@@ -3,8 +3,9 @@ import { Button, Input, Label, Form, FormGroup } from 'reactstrap';
 import { Cabe } from '../components/Cabe'; // Componente de cabecera
 import { Piep } from '../components/Piep'; // Componente de pie de página
 import styles from './Email.module.css'; // Estilos CSS específicos del módulo Email
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, addDoc } from 'firebase/firestore';
 import { db } from './../components/firebaseconfig'; // Configuración de Firebase
+import { getAuth } from 'firebase/auth'; // Para obtener el usuario autenticado
 
 export const Email = () => {
   // Estados para manejar los valores del formulario y otros datos
@@ -48,6 +49,34 @@ export const Email = () => {
     });
   };
 
+  // Función para registrar los detalles del correo en Firebase, incluyendo el remitente autenticado
+  const registrarEnvio = async ({ destinatario, asunto, contenido, adjunto }) => {
+    try {
+      const auth = getAuth(); // Obtén la instancia de autenticación
+      const usuarioAutenticado = auth.currentUser; // Usuario actualmente autenticado
+      const fechaActual = new Date().toISOString().split('T')[0];
+
+      if (!usuarioAutenticado) {
+        throw new Error('No hay un usuario autenticado.');
+      }
+
+      const remitente = usuarioAutenticado.email; // Correo del remitente autenticado
+
+      await addDoc(collection(db, 'envios'), {
+        remitente, // Usuario que envió el correo
+        destinatario, // A quién se envió el correo
+        asunto, // Asunto del correo
+        contenido, // Contenido del correo
+        adjunto: adjunto ? true : false, // Si el correo tenía un archivo adjunto
+        fecha: fechaActual, // Fecha del envío
+      });
+
+      console.log('Datos del envío registrados en Firebase con el remitente.');
+    } catch (error) {
+      console.error('Error al registrar el envío en Firebase:', error);
+    }
+  };
+
   // Función para enviar correos electrónicos al servidor que usará SendGrid
   const EnvioEmails = async (correo) => {
     try {
@@ -74,6 +103,15 @@ export const Email = () => {
       }
 
       alert(`Correo enviado a: ${correo}`); // Muestra una alerta de éxito
+
+      // Registra el envío en Firebase
+      await registrarEnvio({
+        destinatario: correo,
+        asunto,
+        contenido,
+        adjunto: archivo,
+      });
+
     } catch (error) {
       console.error(error);
       alert('Hubo un error al enviar el correo. Por favor intenta de nuevo.');
@@ -164,7 +202,6 @@ export const Email = () => {
                 />
               </div>
             </FormGroup>
-
 
             <FormGroup>
               <Label for="ocupacion">Ocupación:</Label>

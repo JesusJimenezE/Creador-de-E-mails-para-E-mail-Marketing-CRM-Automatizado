@@ -13,6 +13,7 @@ import Prefil from './screens/Prefil'; // Pantalla del perfil
 import Nuecont from './screens/Nuecont'; // Pantalla para agregar nuevo contacto
 import Nuepre from './screens/Nuepre'; // Pantalla para agregar nuevo perfil
 import PrivateRoute from './components/PrivateRoute'; // Componente de protección de rutas
+import Regisenvi from './screens/Regisenvi'; //Pantalla de correos enviados
 
 function App() { // Define el componente App
   const navigate = useNavigate(); // Hook para la navegación entre páginas
@@ -79,6 +80,11 @@ function App() { // Define el componente App
       } />
       <Route path="/nuepre" element={
           <Nuepre /> // Ruta sin protección para agregar un nuevo perfil
+      } />
+      <Route path="/regisenvi" element={
+        <PrivateRoute>
+          <Regisenvi />
+        </PrivateRoute>
       } />
     </Routes>
   );

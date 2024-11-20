@@ -31,24 +31,35 @@ export const Cabe = () => {
       <div className={styles.nave}>
         {/* Menú de navegación con enlaces a diferentes páginas */}
         <Nav className={styles.leftNav}>
+
           <NavItem>
             {/* Enlace a la página de inicio usando RouterNavLink para evitar recargas completas */}
             <RouterNavLink to="/home" className={styles['nav-link']}>
               Inicio
             </RouterNavLink>
           </NavItem>
+
           <NavItem>
             {/* Enlace a la página de contactos */}
             <RouterNavLink to="/contac" className={styles['nav-link']}>
               Contactos
             </RouterNavLink>
           </NavItem>
+
           <NavItem>
             {/* Enlace a la página de envío de correos electrónicos */}
             <RouterNavLink to="/email" className={styles['nav-link']}>
               E-mail
             </RouterNavLink>
           </NavItem>
+
+          <NavItem>
+            {/* Enlace a la página de envío de correos electrónicos */}
+            <RouterNavLink to="/regisenvi" className={styles['nav-link']}>
+              E-mails enviados
+            </RouterNavLink>
+          </NavItem>
+
         </Nav>
         
         {/* Sección de navegación secundaria (parte derecha de la cabecera) */}

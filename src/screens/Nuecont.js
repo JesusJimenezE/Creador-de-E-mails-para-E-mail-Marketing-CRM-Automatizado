@@ -26,6 +26,7 @@ export const Nuecont = () => { // Definimos el componente Nuecont.
     const { name, value } = e.target; // Obtenemos el nombre y el valor del input.
     setUser({ ...user, [name]: value }); // Actualizamos el estado del usuario con el nuevo valor.
   };
+  
 
   // Función para guardar los datos en Firestore.
   const guardarDatos = async (e) => {
