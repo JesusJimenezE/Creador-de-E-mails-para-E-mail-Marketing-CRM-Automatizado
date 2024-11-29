@@ -3,11 +3,9 @@ const express = require('express'); // Framework para crear el servidor de aplic
 const cors = require('cors'); // Middleware que permite realizar solicitudes entre diferentes dominios (CORS)
 const sgMail = require('@sendgrid/mail'); // Librería que facilita el envío de correos electrónicos usando la API de SendGrid
 
-// Configuración de las variables de entorno
-require('dotenv').config(); // Carga las variables de entorno definidas en el archivo .env para usar en el servidor
-
-// Configura la API Key de SendGrid utilizando la clave guardada en el archivo .env
-sgMail.setApiKey(process.env.SENDGRID_API_KEY); // Establece la API Key para poder interactuar con la API de SendGrid
+// Configuración de la clave API de SendGrid directamente en el código (NO recomendado en producción)
+// Se recomienda usar variables de entorno para mantener la seguridad de la clave
+sgMail.setApiKey('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'); // Establece la API Key para poder interactuar con la API de SendGrid
 
 // Inicializa la aplicación de Express
 const app = express(); // Crea una instancia de la aplicación Express
@@ -31,7 +29,7 @@ app.post('/enviar-correo', async (req, res) => {
   // Configura el mensaje de correo utilizando los datos extraídos del cuerpo de la solicitud
   const msg = {
     to,  // Dirección de correo del destinatario, proporcionada desde el frontend
-    from: 'maestriaennegociosdigitales@modelodenegocios.com',
+    from: 'maestriaennegociosdigitales@modelodenegocios.com', // Dirección de correo del remitente
     templateId, // ID de la plantilla de correo en SendGrid
     dynamic_template_data: {
       subject, // Envía el asunto como variable de la plantilla
