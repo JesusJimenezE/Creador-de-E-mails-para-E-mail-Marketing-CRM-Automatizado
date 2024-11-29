@@ -83,7 +83,7 @@ export const Email = () => {
       const archivoBase64 = archivo ? await convertirArchivoABase64(archivo) : null; // Convierte archivo si existe
 
       // Realiza la solicitud POST al servidor para enviar el correo
-      const response = await fetch('http://localhost:5000/enviar-correo', {
+      const response = await fetch('https://creador-de-e-mails-para-e-mail-marketing.onrender.com/enviar-correo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
