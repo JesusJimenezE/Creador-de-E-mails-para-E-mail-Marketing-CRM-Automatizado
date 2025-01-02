@@ -1,14 +1,12 @@
-import React, { useState } from 'react'; // Importamos React y useState para manejar el estado.
-import { Cabe } from '../components/Cabe'; // Importamos el componente de la cabecera.
-import { Piep } from '../components/Piep'; // Importamos el componente del pie de página.
-import { Button, Input, Label, Form, FormGroup } from 'reactstrap'; // Importamos componentes de Reactstrap para crear el formulario.
-import styles from './Nuecont.module.css'; // Importamos estilos específicos para esta página.
-import { db } from '../components/firebaseconfig';  // Importa `db` desde firebaseconfig para interactuar con Firestore.
+import React, { useState } from 'react';
+import { Cabe } from '../components/Cabe'; // Componente de cabecera.
+import { Piep } from '../components/Piep'; // Componente de pie de página.
+import { Button, Input, Label, Form, FormGroup } from 'reactstrap'; // Componentes de Reactstrap.
+import { db } from '../components/firebaseconfig'; // Configuración de Firebase Firestore.
+import { collection, addDoc } from 'firebase/firestore'; // Métodos necesarios para Firestore.
 
-import { collection, addDoc } from 'firebase/firestore';  // Importa solo los métodos necesarios de Firestore.
-
-export const Nuecont = () => { // Definimos el componente Nuecont.
-  // Valor inicial del formulario.
+export const Nuecont = () => {
+  // Valores iniciales del formulario.
   const valorInicial = {
     nombre: '',
     edad: '',
@@ -18,119 +16,121 @@ export const Nuecont = () => { // Definimos el componente Nuecont.
     ocupacion: ''
   };
 
-  // Estado para los valores del formulario.
+  // Estado para manejar los valores del formulario.
   const [user, setUser] = useState(valorInicial);
 
-  // Función para capturar los inputs del formulario.
+  // Capturar valores de los inputs del formulario.
   const capturarInputs = (e) => {
-    const { name, value } = e.target; // Obtenemos el nombre y el valor del input.
-    setUser({ ...user, [name]: value }); // Actualizamos el estado del usuario con el nuevo valor.
+    const { name, value } = e.target;
+    setUser({ ...user, [name]: value });
   };
-  
 
   // Función para guardar los datos en Firestore.
   const guardarDatos = async (e) => {
-    e.preventDefault(); // Previene el comportamiento por defecto del formulario.
-
-    // Convertir los campos numéricos a números enteros.
+    e.preventDefault(); // Evita el comportamiento predeterminado del formulario.
     const datosConvertidos = {
       ...user,
-      edad: parseInt(user.edad, 10),  // Convertir la edad a número entero.
-      numero: parseInt(user.numero, 10) // Convertir el número a número entero.
+      edad: parseInt(user.edad, 10), // Convierte edad a número entero.
+      numero: parseInt(user.numero, 10) // Convierte número a número entero.
     };
 
     try {
-      // Intentar agregar el nuevo documento a la colección 'contactos'.
-      await addDoc(collection(db, 'contactos'), datosConvertidos);
-      alert("Contacto agregado exitosamente"); // Mostrar alerta si el contacto se agrega con éxito.
+      await addDoc(collection(db, 'contactos'), datosConvertidos); // Agrega el contacto a Firestore.
+      alert("Contacto agregado exitosamente");
     } catch (error) {
-      console.error("Error al guardar los datos:", error); // Mostrar error en la consola si ocurre un fallo.
+      console.error("Error al guardar los datos:", error);
     }
 
-    // Resetear el formulario después de agregar los datos.
+    // Resetea el formulario.
     setUser({ ...valorInicial });
   };
 
   return (
-    <div>
+    <div className="min-h-screen flex flex-col">
       <Cabe /> {/* Componente de cabecera */}
 
-      <div className={styles.NuevoPage}> {/* Contenedor para la página de nuevo contacto */}
-        <div className={styles.FormContainer}> {/* Contenedor del formulario */}
-          <Form onSubmit={guardarDatos}> {/* Asignamos la función guardarDatos al evento onSubmit */}
+      <div className="flex-grow bg-gray-100 py-10">
+        <div className="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-8">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">Agregar Nuevo Contacto</h2>
+          <Form onSubmit={guardarDatos} className="space-y-4">
             {/* Campo para el nombre */}
             <FormGroup>
-              <Label for="nombrec">Nombre:</Label>
-              <Input 
-                id="nombrec" name="nombre" type="text" onChange={capturarInputs} // Maneja cambios en el input
-                value={user.nombre} // Valor del input vinculado al estado
+              <Label for="nombrec" className="text-gray-700 font-medium">Nombre:</Label>
+              <Input
+                id="nombrec"
+                name="nombre"
+                type="text"
+                className="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                onChange={capturarInputs}
+                value={user.nombre}
               />
             </FormGroup>
 
-            {/* Campo para la edad */}
+            {/* Agrupar edad y género en la misma línea */}
+            <div className="grid grid-cols-2 gap-4">
+              {/* Campo para la edad */}
+              <FormGroup>
+                <Label for="edad" className="text-gray-700 font-medium">Edad:</Label>
+                <Input
+                  id="edad" name="edad" type="number" className="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" onChange={capturarInputs} value={user.edad} />
+              </FormGroup>
+
+              {/* Campo para el género */}
+              <FormGroup>
+                <Label for="genero" className="text-gray-700 font-medium">Género:</Label>
+                <Input
+                  id="genero" name="genero" type="select" className="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" onChange={capturarInputs} value={user.genero} >
+
+                  <option value="">Seleccione una opción</option>
+                  <option value="Masculino">Masculino</option>
+                  <option value="Femenino">Femenino</option>
+                  <option value="Otros">Otros</option>
+                </Input>
+              </FormGroup>
+            </div>
+
+            {/* Campo para el correo */}
             <FormGroup>
-              <Label for="edad">Edad:</Label>
-              <Input 
-                id="edad" name="edad" type="number" onChange={capturarInputs} // Maneja cambios en el input
-                value={user.edad} // Valor del input vinculado al estado
+              <Label for="correoc" className="text-gray-700 font-medium">Correo:</Label>
+              <Input
+                id="correoc"
+                name="correo"
+                type="email"
+                className="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                onChange={capturarInputs}
+                value={user.correo}
               />
             </FormGroup>
 
-            {/* Selector para género */}
+            {/* Campo para el número telefónico */}
             <FormGroup>
-              <Label for="genero">Género:</Label>
-              <Input 
-                id="genero" name="genero" type="select" onChange={capturarInputs} // Maneja cambios en el input
-                value={user.genero} // Valor del input vinculado al estado
-              >
-                <option value="">Seleccione una opción</option> {/* Opción predeterminada */}
-                <option value="Masculino">Masculino</option>
-                <option value="Femenino">Femenino</option>
-                <option value="Otros">Otros</option>
-              </Input>
+              <Label for="numeroc" className="text-gray-700 font-medium">Número telefónico:</Label>
+              <Input
+                id="numeroc" name="numero" type="number" className="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" onChange={capturarInputs} value={user.numero} />
             </FormGroup>
 
-            {/* Campo para correo */}
+            {/* Campo para la ocupación */}
             <FormGroup>
-              <Label for="correoc">Correo:</Label>
-              <Input 
-                id="correoc" name="correo" type="email" onChange={capturarInputs} // Maneja cambios en el input
-                value={user.correo} // Valor del input vinculado al estado
-              />
+              <Label for="ocupacion" className="text-gray-700 font-medium">Ocupación:</Label>
+              <Input id="ocupacion" name="ocupacion" type="text" className="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" onChange={capturarInputs} value={user.ocupacion} />
             </FormGroup>
 
-            {/* Campo para número telefónico */}
-            <FormGroup>
-              <Label for="numeroc">Número telefónico:</Label>
-              <Input 
-                id="numeroc" name="numero" type="number" onChange={capturarInputs} // Maneja cambios en el input
-                value={user.numero} // Valor del input vinculado al estado
-              />
-            </FormGroup>
-
-            {/* Campo para ocupación */}
-            <FormGroup>
-              <Label for="ocupacion">Ocupación:</Label>
-              <Input 
-                id="ocupacion" name="ocupacion" type="text" onChange={capturarInputs} // Maneja cambios en el input
-                value={user.ocupacion} // Valor del input vinculado al estado
-              />
-            </FormGroup>
-
-            {/* Botones para guardar y limpiar */}
-            <Button className={styles.guar} type="submit">Guardar</Button> {/* Botón para guardar */}
-            <Button 
-              className={styles.lim} type="button" onClick={() => setUser({ ...valorInicial })} // Limpiar los campos del formulario
-            >
-              Limpiar
-            </Button>
+            {/* Botones de acción */}
+            <div className="flex space-x-4">
+              <Button type="submit" className="!bg-blue-500 !text-white !py-2 !px-6 !rounded-md hover:!bg-blue-600 focus:!outline-none focus:!bg-blue-600 transition-colors duration-300">
+                Guardar
+              </Button>
+              <Button type="button" className="!bg-red-600 !text-white !px-3 !py-1 !rounded-md font-bold hover:!bg-red-700 transition" onClick={() => setUser({ ...valorInicial })}>
+                Limpiar
+              </Button>
+            </div>
           </Form>
         </div>
       </div>
 
-      <Piep /> {/* Componente del pie de página */}
+      <Piep /> {/* Componente de pie de página */}
     </div>
   );
 };
 
-export default Nuecont; // Exportamos el componente Nuecont como predeterminado.
+export default Nuecont;

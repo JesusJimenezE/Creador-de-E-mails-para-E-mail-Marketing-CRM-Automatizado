@@ -9,7 +9,7 @@ import { collection, getDocs, doc, deleteDoc } from 'firebase/firestore'; // Fun
 export const Contac = () => {
   const [contactos, setContactos] = useState([]); // Estado para almacenar la lista de contactos
   const [currentPage, setCurrentPage] = useState(1); // Estado para gestionar la página actual en la paginación
-  const itemsPerPage = 30; // Número de contactos a mostrar por página
+  const itemsPerPage = 15; // Número de contactos a mostrar por página
   const [searchTerm, setSearchTerm] = useState(''); // Estado para almacenar el término de búsqueda
   const navigate = useNavigate(); // Hook para redirigir al usuario a otra ruta
 
@@ -72,10 +72,8 @@ export const Contac = () => {
           />
           <button
             onClick={handleButtonClick} // Redirige al formulario de agregar contacto
-            className="bg-blue-500 text-white px-4 py-2 rounded-md font-bold hover:bg-green-500 transition"
-          >
-            Agregar contacto
-          </button>
+            className="bg-blue-500 text-white py-2 px-6 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600 transition-colors duration-300"
+          > Agregar contacto </button>
         </div>
 
         {/* Tabla estilizada */}
@@ -126,7 +124,7 @@ export const Contac = () => {
             <button
               key={index} // Índice único del botón
               onClick={() => paginate(index + 1)} // Cambia a la página correspondiente
-              className="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-gray-500 transition"
+              className="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none"
             >
               {index + 1}
             </button>

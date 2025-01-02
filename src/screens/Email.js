@@ -1,88 +1,92 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Input, Label, Form, FormGroup } from 'reactstrap';
-import { Cabe } from '../components/Cabe'; // Componente de cabecera
-import { Piep } from '../components/Piep'; // Componente de pie de página
-import styles from './Email.module.css'; // Estilos CSS específicos del módulo Email
-import { collection, query, where, getDocs, addDoc } from 'firebase/firestore';
-import { db } from './../components/firebaseconfig'; // Configuración de Firebase
-import { getAuth } from 'firebase/auth'; // Para obtener el usuario autenticado
+import React, { useEffect, useState } from 'react'; // Importa React y hooks useState y useEffect.
+import { Cabe } from '../components/Cabe'; // Importa el componente de cabecera.
+import { Piep } from '../components/Piep'; // Importa el componente de pie de página.
+import { Button, Input, Label, Form, FormGroup } from 'reactstrap'; // Importa componentes de Reactstrap para la UI.
+import { collection, query, where, getDocs, addDoc } from 'firebase/firestore'; // Importa funciones de Firebase Firestore.
+import { db } from './../components/firebaseconfig'; // Importa la configuración de Firebase.
+import { getAuth } from 'firebase/auth'; // Importa la función para obtener el usuario autenticado.
 
 export const Email = () => {
-  // Estados para manejar los valores del formulario y otros datos
-  const [genero, setGenero] = useState('');
-  const [edad, setEdad] = useState({ min: '', max: '' });
-  const [ocupacion, setOcupacion] = useState('');
-  const [ocupacionesDisponible, setOcupacionesDisponibles] = useState([]);
-  const [cargando, setCargando] = useState(false);
-  const [asunto, setAsunto] = useState('');
-  const [contenido, setContenido] = useState('');
-  const [archivo, setArchivo] = useState(null);
+  // Define los estados locales del componente para almacenar la información del formulario.
+  const [genero, setGenero] = useState(''); // Género seleccionado.
+  const [edad, setEdad] = useState({ min: '', max: '' }); // Rango de edad.
+  const [ocupacion, setOcupacion] = useState(''); // Ocupación seleccionada.
+  const [ocupacionesDisponibles, setOcupacionesDisponibles] = useState([]); // Lista de ocupaciones disponibles.
+  const [asunto, setAsunto] = useState(''); // Asunto del correo.
+  const [contenido, setContenido] = useState(''); // Contenido del correo.
+  const [archivo, setArchivo] = useState(null); // Archivo adjunto.
+  const [cargando, setCargando] = useState(false); // Estado de carga para mostrar cuando se está enviando el correo.
 
-  // useEffect para cargar las ocupaciones desde Firestore al montar el componente
+  // useEffect se ejecuta cuando el componente se monta, obtiene las ocupaciones disponibles de Firestore.
   useEffect(() => {
     const obtenerOcupaciones = async () => {
       const ocupaciones = [];
-      const q = query(collection(db, 'contactos')); // Consulta de la colección "contactos"
-      const querySnapshot = await getDocs(q);
+      const q = query(collection(db, 'contactos')); // Consulta para obtener todos los contactos.
+      const querySnapshot = await getDocs(q); // Obtiene los documentos.
 
-      // Recorre cada documento en la colección
       querySnapshot.forEach((doc) => {
         const data = doc.data();
         if (data.ocupacion && !ocupaciones.includes(data.ocupacion)) {
-          ocupaciones.push(data.ocupacion); // Agrega ocupaciones únicas
+          ocupaciones.push(data.ocupacion); // Añade ocupaciones únicas.
         }
       });
 
-      setOcupacionesDisponibles(ocupaciones); // Actualiza el estado con las ocupaciones obtenidas
+      setOcupacionesDisponibles(ocupaciones); // Actualiza el estado con las ocupaciones disponibles.
     };
 
-    obtenerOcupaciones(); // Llama a la función para obtener las ocupaciones
-  }, []);
+    obtenerOcupaciones();
+  }, []); // Dependencias vacías, solo se ejecuta una vez cuando el componente se monta.
 
-  // Convierte archivo a Base64 para adjuntarlo en el envío de correo
+  // Función para limpiar el formulario y resetear los estados.
+  const limpiarFormulario = () => {
+    setGenero('');
+    setEdad({ min: '', max: '' });
+    setOcupacion('');
+    setAsunto('');
+    setContenido('');
+    setArchivo(null);
+  };
+
+  // Función para convertir un archivo a base64, usada para enviar archivos adjuntos en el correo.
   const convertirArchivoABase64 = (archivo) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.onload = () => resolve(reader.result.split(',')[1]); // Elimina el prefijo de Base64
-      reader.onerror = (error) => reject(error);
-      reader.readAsDataURL(archivo);
+      reader.onload = () => resolve(reader.result.split(',')[1]); // Extrae la parte base64 del archivo.
+      reader.onerror = (error) => reject(error); // Maneja errores.
+      reader.readAsDataURL(archivo); // Lee el archivo como Data URL.
     });
   };
 
-  // Función para registrar los detalles del correo en Firebase, incluyendo el remitente autenticado
+  // Función para registrar el envío de un correo en Firestore.
   const registrarEnvio = async ({ destinatario, asunto, contenido, adjunto }) => {
     try {
-      const auth = getAuth(); // Obtén la instancia de autenticación
-      const usuarioAutenticado = auth.currentUser; // Usuario actualmente autenticado
-      const fechaActual = new Date().toISOString().split('T')[0];
+      const auth = getAuth(); // Obtiene el objeto de autenticación.
+      const usuarioAutenticado = auth.currentUser; // Obtiene el usuario autenticado.
 
       if (!usuarioAutenticado) {
-        throw new Error('No hay un usuario autenticado.');
+        throw new Error('No hay un usuario autenticado.'); // Lanza un error si no hay usuario autenticado.
       }
 
-      const remitente = usuarioAutenticado.email; // Correo del remitente autenticado
-
+      // Añade un nuevo documento en la colección 'envios' en Firestore con la información del correo.
       await addDoc(collection(db, 'envios'), {
-        remitente, // Usuario que envió el correo
-        destinatario, // A quién se envió el correo
-        asunto, // Asunto del correo
-        contenido, // Contenido del correo
-        adjunto: adjunto ? true : false, // Si el correo tenía un archivo adjunto
-        fecha: fechaActual, // Fecha del envío
+        remitente: usuarioAutenticado.email,
+        destinatario,
+        asunto,
+        contenido,
+        adjunto: adjunto ? true : false,
+        fecha: new Date().toISOString().split('T')[0], // Formato de fecha YYYY-MM-DD.
       });
-
-      console.log('Datos del envío registrados en Firebase con el remitente.');
     } catch (error) {
-      console.error('Error al registrar el envío en Firebase:', error);
+      console.error('Error al registrar el envío en Firebase:', error); // Maneja errores al registrar el envío.
     }
   };
 
-  // Función para enviar correos electrónicos al servidor que usará SendGrid
+  // Función para enviar los correos a los destinatarios.
   const EnvioEmails = async (correo) => {
     try {
-      const archivoBase64 = archivo ? await convertirArchivoABase64(archivo) : null; // Convierte archivo si existe
+      const archivoBase64 = archivo ? await convertirArchivoABase64(archivo) : null; // Convierte el archivo a base64 si existe.
 
-      // Realiza la solicitud POST al servidor para enviar el correo
+      // Realiza una solicitud POST al servidor para enviar el correo.
       const response = await fetch('https://creador-de-e-mails-para-e-mail-marketing.onrender.com/enviar-correo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -90,97 +94,80 @@ export const Email = () => {
           to: correo,
           subject: asunto,
           text: contenido,
-          templateId: 'd-bf33b512e5d1446596460967f0ca5dda', // ID de plantilla en SendGrid
+          templateId: 'd-bf33b512e5d1446596460967f0ca5dda',
           fileContent: archivoBase64,
           fileName: archivo ? archivo.name : '',
         }),
       });
 
-      // Verifica si la solicitud fue exitosa
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error('Error al enviar el correo: ' + (errorData.message || response.statusText));
+        throw new Error('Error al enviar el correo: ' + (errorData.message || response.statusText)); // Maneja errores de la solicitud.
       }
 
-      alert(`Correo enviado a: ${correo}`); // Muestra una alerta de éxito
-
-      // Registra el envío en Firebase
-      await registrarEnvio({
-        destinatario: correo,
-        asunto,
-        contenido,
-        adjunto: archivo,
-      });
-
+      alert(`Correo enviado a: ${correo}`); // Muestra una alerta cuando el correo se envía correctamente.
+      await registrarEnvio({ destinatario: correo, asunto, contenido, adjunto: archivo }); // Registra el envío en Firestore.
     } catch (error) {
-      console.error(error);
-      alert('Hubo un error al enviar el correo. Por favor intenta de nuevo.');
+      console.error(error); // Maneja errores en el envío del correo.
+      alert('Hubo un error al enviar el correo. Por favor intenta de nuevo.'); // Muestra un mensaje de error.
     }
   };
 
-  // Función para buscar correos electrónicos en Firestore aplicando filtros
+  // Función para buscar los correos que coinciden con los filtros aplicados (género, edad, ocupación).
   const buscarCorreos = async () => {
     if (!asunto || !contenido) {
-      alert('Por favor, completa el asunto y el contenido del correo.');
+      alert('Por favor, completa el asunto y el contenido del correo.'); // Verifica que los campos esenciales estén llenos.
       return;
     }
 
-    setCargando(true); // Muestra estado de carga durante la búsqueda
+    setCargando(true); // Activa el estado de carga.
     try {
-      const contactosRef = collection(db, 'contactos');
-      let filtros = []; // Array de filtros para la consulta
+      const contactosRef = collection(db, 'contactos'); // Referencia a la colección de contactos.
+      let filtros = []; // Array de filtros para la consulta.
 
+      // Agrega filtros según el género y ocupación seleccionados.
       if (genero && genero !== 'Todos') filtros.push(where('genero', '==', genero));
       if (ocupacion && ocupacion !== 'Todos') filtros.push(where('ocupacion', '==', ocupacion));
 
-      // Configura el rango de edad
+      // Convierte los valores de edad mínima y máxima a enteros y agrega los filtros correspondientes.
       const minEdad = parseInt(edad.min) || 0;
       const maxEdad = parseInt(edad.max) || 100;
-      if (minEdad > maxEdad) {
-        console.error('Rango de edad inválido.');
-        return;
-      }
 
       if (edad.min) filtros.push(where('edad', '>=', minEdad));
       if (edad.max) filtros.push(where('edad', '<=', maxEdad));
 
-      // Ejecuta la consulta en Firebase Firestore con los filtros aplicados
-      const q = filtros.length ? query(contactosRef, ...filtros) : query(contactosRef);
-      const querySnapshot = await getDocs(q);
+      const q = filtros.length ? query(contactosRef, ...filtros) : query(contactosRef); // Aplica los filtros a la consulta.
+      const querySnapshot = await getDocs(q); // Ejecuta la consulta.
 
       if (!querySnapshot.empty) {
-        // Extrae los correos de los contactos encontrados
-        const correos = querySnapshot.docs.map((doc) => doc.data().correo);
-        await Promise.all(correos.map((correo) => EnvioEmails(correo))); // Envía correos en paralelo
-        console.log('Correos encontrados:', correos);
+        const correos = querySnapshot.docs.map((doc) => doc.data().correo); // Obtiene los correos de los documentos.
+        await Promise.all(correos.map((correo) => EnvioEmails(correo))); // Envía el correo a todos los contactos.
       } else {
-        console.log('No se encontraron correos que coincidan con los filtros.');
+        alert('No se encontraron correos que coincidan con los filtros.'); // Muestra un mensaje si no hay resultados.
       }
     } catch (error) {
-      console.error('Error al buscar correos:', error);
+      console.error('Error al buscar correos:', error); // Maneja errores en la búsqueda de correos.
     } finally {
-      setCargando(false); // Oculta el estado de carga al finalizar
+      setCargando(false); // Desactiva el estado de carga.
     }
   };
 
   return (
-    <div>
-      <Cabe /> {/* Componente de cabecera */}
-      <div className={styles.EmailPage}>
-        <div className={styles.FormContainer}>
+    <div className="min-h-screen flex flex-col">
+      <Cabe /> {/* Muestra el componente de cabecera */}
+      <div className="flex-grow bg-gray-100 py-10">
+        <div className="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-8">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">Enviar Correo</h2>
           <Form>
+            {/* Formulario con campos de entrada para los filtros y datos del correo */}
             <FormGroup>
               <Label for="asunto">Asunto:</Label>
-              <Input
-                id="asunto" name="asunto" type="text" value={asunto} onChange={(e) => setAsunto(e.target.value)}
-              />
+              <Input id="asunto" type="text" value={asunto} onChange={(e) => setAsunto(e.target.value)} />
             </FormGroup>
 
             <FormGroup>
               <Label for="genero">Género:</Label>
-              <Input
-                id="genero" name="genero" type="select" value={genero} onChange={(e) => setGenero(e.target.value)}
-              >
+              <Input id="genero" type="select" value={genero} onChange={(e) => setGenero(e.target.value)}>
                 <option value="">Seleccione una opción</option>
                 <option value="Masculino">Masculino</option>
                 <option value="Femenino">Femenino</option>
@@ -190,26 +177,18 @@ export const Email = () => {
             </FormGroup>
 
             <FormGroup>
-              <Label for="edad">Rango de edad:</Label>
-              <div className={styles.edadContainer}> {/* Clase añadida para el contenedor */}
-                <Input
-                  type="number" placeholder="Edad mínima" value={edad.min} onChange={(e) => setEdad({ ...edad, min: e.target.value })}
-                  className={styles.edadInput}  // Clase adicional para los inputs
-                />
-                <Input
-                  type="number" placeholder="Edad máxima" value={edad.max} onChange={(e) => setEdad({ ...edad, max: e.target.value })}
-                  className={styles.edadInput}  // Clase adicional para los inputs
-                />
+              <Label for="edad">Rango de Edad:</Label>
+              <div className="grid grid-cols-2 gap-4">
+                <Input type="number" placeholder="Mínima" value={edad.min} onChange={(e) => setEdad({ ...edad, min: e.target.value })} />
+                <Input type="number" placeholder="Máxima" value={edad.max} onChange={(e) => setEdad({ ...edad, max: e.target.value })} />
               </div>
             </FormGroup>
 
             <FormGroup>
               <Label for="ocupacion">Ocupación:</Label>
-              <Input
-                id="ocupacion" name="ocupacion" type="select" value={ocupacion} onChange={(e) => setOcupacion(e.target.value)}
-              >
+              <Input id="ocupacion" type="select" value={ocupacion} onChange={(e) => setOcupacion(e.target.value)}>
                 <option value="">Seleccione una opción</option>
-                {ocupacionesDisponible.map((ocup, index) => (
+                {ocupacionesDisponibles.map((ocup, index) => (
                   <option key={index} value={ocup}>{ocup}</option>
                 ))}
                 <option value="Todos">Todos</option>
@@ -218,23 +197,26 @@ export const Email = () => {
 
             <FormGroup>
               <Label for="contenido">Contenido:</Label>
-              <Input
-                id="contenido" name="contenido" type="textarea" value={contenido} onChange={(e) => setContenido(e.target.value)}
-              />
+              <Input id="contenido" type="textarea" value={contenido} onChange={(e) => setContenido(e.target.value)} />
             </FormGroup>
 
             <FormGroup>
               <Label for="archivo">Adjuntar Archivo:</Label>
-              <Input id="archivo" name="archivo" type="file" onChange={(e) => setArchivo(e.target.files[0])} />
+              <Input id="archivo" type="file" onChange={(e) => setArchivo(e.target.files[0])} />
             </FormGroup>
 
-            <Button className={styles.env} onClick={buscarCorreos} disabled={cargando}>
-              {cargando ? 'Enviando...' : 'Enviar Correo'}
-            </Button>
+            <div className="flex space-x-4">
+              <Button onClick={buscarCorreos} disabled={cargando} className="!bg-blue-500 !text-white !py-2 !px-6 !rounded-md hover:!bg-blue-600 focus:!outline-none focus:!bg-blue-600 transition-colors duration-300">
+                {cargando ? 'Enviando...' : 'Enviar'}
+              </Button>
+              <Button type="button" onClick={limpiarFormulario} className="!bg-red-600 !text-white !px-3 !py-1 !rounded-md font-bold hover:!bg-red-700 transition">
+                Limpiar
+              </Button>
+            </div>
           </Form>
         </div>
       </div>
-      <Piep /> {/* Componente de pie de página */}
+      <Piep /> {/* Muestra el componente de pie de página */}
     </div>
   );
 };
