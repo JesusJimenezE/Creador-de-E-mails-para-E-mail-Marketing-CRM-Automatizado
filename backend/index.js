@@ -1,6 +1,6 @@
 const express = require('express'); // Importa el módulo de Express, un framework para crear aplicaciones web y APIs en Node.js
 const cors = require('cors'); // Importa el módulo de CORS, que permite solicitudes entre diferentes dominios (Cross-Origin Resource Sharing)
-const emailRoutes = require('./routes/emailRoutes'); // Importa las rutas definidas para manejar solicitudes relacionadas con correos electrónicos
+const emailRoutes = require('./router/email.routes'); // Importa las rutas definidas para manejar solicitudes relacionadas con correos electrónicos
 const app = express(); // Crea una instancia de la aplicación Express
 
 
