@@ -1,49 +1,46 @@
+// Importa el módulo de configuración de SendGrid, donde se encuentra la configuración para enviar correos
+const sgMail = require('./../config/sendgrid');
 
+// Define una función asíncrona para manejar el envío de correos electrónicos
+const sendEmail = async (req, res) => {
+  // Extrae los datos enviados en el cuerpo de la solicitud (req.body)
+  const { to, templateId, subject, text, fileContent, fileName } = req.body;
 
-module.exports= {
-    
-    post : (req, res) => {
+  // Configura el mensaje de correo electrónico con los datos proporcionados
+  const msg = {
+    to, // Dirección del destinatario
+    from: 'maestriaennegociosdigitales@modelodenegocios.com', // Dirección del remitente
+    templateId, // ID de la plantilla de correo en SendGrid
+    dynamic_template_data: { 
+      subject, // Variable para el asunto del correo, usada en la plantilla
+      text,    // Variable para el cuerpo del mensaje, usada en la plantilla
+    },
+    attachments: fileContent // Verifica si hay contenido para adjuntar
+      ? [
+          {
+            content: fileContent, // Contenido del archivo en formato Base64
+            filename: fileName,   // Nombre del archivo adjunto
+            type: 'application/octet-stream', // Tipo MIME del archivo
+            disposition: 'attachment', // Indica que el archivo es un adjunto
+          },
+        ]
+      : [], // Si no hay contenido, no incluye adjuntos
+  };
 
-        // Extrae los datos enviados desde el frontend en el cuerpo de la solicitud
-          const { to, templateId, subject, text, fileContent, fileName } = req.body;
-        
-          // Configura el mensaje de correo utilizando los datos extraídos del cuerpo de la solicitud
-          const msg = {
-            to,  // Dirección de correo del destinatario, proporcionada desde el frontend
-            from: 'maestriaennegociosdigitales@modelodenegocios.com', // Dirección de correo del remitente
-            templateId, // ID de la plantilla de correo en SendGrid
-            dynamic_template_data: {
-              subject, // Envía el asunto como variable de la plantilla
-              text,    // Envía el texto que reemplazará {{text}} en la plantilla
-            },
-            attachments: fileContent
-              ? [
-                  {
-                    content: fileContent, // Contenido del archivo en Base64
-                    filename: fileName, // Nombre del archivo
-                    type: 'application/octet-stream', // Tipo MIME (puede cambiar según el tipo de archivo)
-                    disposition: 'attachment', // Define que es un adjunto
-                  },
-                ]
-              : [],
-          };
-        
-          try {
-            // Envía el correo utilizando la API de SendGrid
-            await sgMail.send(msg); // La función send de sgMail envía el correo utilizando los datos configurados
-        
-            // Si el correo se envía correctamente, responde con un mensaje de éxito (código 200)
-            res.status(200).json({ message: 'Correo enviado exitosamente.' });
-            console.log('Asunto recibido:', subject);
-            console.log('texto recibido:', text);
-            console.log('plantilla recibida:', templateId);
-          } catch (error) {
-            // Si ocurre un error al enviar el correo, lo muestra en la consola
-            console.error('Error al enviar el correo:', error);
-        
-            // Responde con un mensaje de error y el detalle del mismo (código 500)
-            res.status(500).json({ message: 'Error al enviar el correo.', error });
-          }
+  try {
+    // Intenta enviar el correo utilizando el método send de SendGrid
+    await sgMail.send(msg);
 
-    }
-}
+    // Si el correo se envía con éxito, responde con un mensaje de éxito (código 200)
+    res.status(200).json({ message: 'Correo enviado exitosamente.' });
+  } catch (error) {
+    // Si ocurre un error, lo registra en la consola para depuración
+    console.error('Error al enviar el correo:', error);
+
+    // Responde al cliente con un mensaje de error y el detalle del problema (código 500)
+    res.status(500).json({ message: 'Error al enviar el correo.', error });
+  }
+};
+
+// Exporta la función `sendEmail` para que pueda ser utilizada en otros módulos
+module.exports = { sendEmail };
