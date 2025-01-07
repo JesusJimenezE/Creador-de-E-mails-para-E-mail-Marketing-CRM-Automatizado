@@ -7,9 +7,8 @@ const app = express(); // Crea una instancia de la aplicación Express
 app.use(cors()); // Middleware para habilitar CORS y permitir solicitudes desde otros dominios
 app.use(express.json({ limit: '10mb' })); // Middleware para parsear el cuerpo de las solicitudes HTTP en formato JSON con un tamaño máximo de 10MB
 
-// Monta las rutas relacionadas con correos electrónicos en la ruta base '/api'
-// Esto significa que cualquier solicitud a '/api' será manejada por las rutas definidas en emailRoutes
-app.use('/api', emailRoutes);
+// Monta las rutas 
+app.use('/', emailRoutes);
 
 // Define el puerto en el que el servidor escuchará las solicitudes
 // Usa el puerto definido en las variables de entorno (process.env.PORT) o el 5000 por defecto
