@@ -60,6 +60,20 @@ export const Cabe = () => {
             </RouterNavLink>
           </NavItem>
 
+          <NavItem>
+            {/* Enlace a la página de envío de correos electrónicos */}
+            <RouterNavLink to="/tabl" className={styles['nav-link']}>
+              Tabla de servicio
+            </RouterNavLink>
+          </NavItem>
+
+          <NavItem>
+            {/* Enlace a la página de envío de correos electrónicos */}
+            <RouterNavLink to="/asist" className={styles['nav-link']}>
+              Asistencia
+            </RouterNavLink>
+          </NavItem>
+
         </Nav>
         
         {/* Sección de navegación secundaria (parte derecha de la cabecera) */}

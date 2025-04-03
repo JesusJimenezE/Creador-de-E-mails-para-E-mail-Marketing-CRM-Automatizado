@@ -15,6 +15,11 @@ import Nuepre from './screens/Nuepre'; // Pantalla para agregar nuevo perfil
 import PrivateRoute from './components/PrivateRoute'; // Componente de protección de rutas
 import Regisenvi from './screens/Regisenvi'; //Pantalla de correos enviados
 
+import Asisten from './screens/asistencia/Asiste';
+import Regispres from './screens/asistencia/Regispres';
+import Tablasist from './screens/asistencia/Tablasist';
+
+
 function App() { // Define el componente App
   const navigate = useNavigate(); // Hook para la navegación entre páginas
 
@@ -48,10 +53,10 @@ function App() { // Define el componente App
           </div>
         }
       />
-      
+
       {/* Ruta para la pantalla de login */}
-      <Route path="/login" element={<Login />} /> 
-      
+      <Route path="/login" element={<Login />} />
+
       {/* Rutas protegidas por autenticación */}
       <Route path="/home" element={
         <PrivateRoute>
@@ -79,14 +84,38 @@ function App() { // Define el componente App
         </PrivateRoute>
       } />
       <Route path="/nuepre" element={
-          <Nuepre /> // Ruta sin protección para agregar un nuevo perfil
+        <Nuepre /> // Ruta sin protección para agregar un nuevo perfil
       } />
       <Route path="/regisenvi" element={
         <PrivateRoute>
           <Regisenvi />
         </PrivateRoute>
       } />
+
+
+
+      <Route path="/asist" element={
+        <PrivateRoute>
+          <Asisten />
+        </PrivateRoute>
+      } />
+
+      <Route path="/tabl" element={
+        <PrivateRoute>
+          <Tablasist />
+        </PrivateRoute>
+      } />
+
+      <Route path="/regisr" element={
+        <PrivateRoute>
+          <Regispres />
+        </PrivateRoute>
+      } />
+
+
     </Routes>
+
+
   );
 }
 
