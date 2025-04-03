@@ -5,16 +5,21 @@ import { useNavigate } from 'react-router-dom';
 import { Cabe } from './../../components/Cabe'; // Importa el componente de cabecera.
 
 export const Tablasist = () => {
+  // Estado para el término de búsqueda en la tabla
   const [searchTerm, setSearchTerm] = useState('');
+  // Estado para almacenar los servicios obtenidos de Firestore
   const [servicio, setServicio] = useState([]);
+  // Estado para controlar la carga de datos
   const [loading, setLoading] = useState(true);
+  // Estado para manejar la paginación
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
   const navigate = useNavigate();
 
+  // Función para navegar a la página de registro
   const handleButtonClick = () => navigate('/regisr');
 
-  // Función para calcular la diferencia de horas entre entrada y salida
+  // Función para calcular la diferencia de horas entre la entrada y la salida
   const calcularDiferenciaHoras = (entrada, salida) => {
     const [hEntrada, mEntrada, sEntrada] = entrada.split(':').map(Number);
     const [hSalida, mSalida, sSalida] = salida.split(':').map(Number);
@@ -26,36 +31,37 @@ export const Tablasist = () => {
     fechaSalida.setHours(hSalida, mSalida, sSalida);
 
     const diferenciaMs = fechaSalida - fechaEntrada;
-    const diferenciaHoras = diferenciaMs / 1000 / 60 / 60;
+    const diferenciaHoras = diferenciaMs / 1000 / 60 / 60; // Convertir de milisegundos a horas
 
     console.log(`Entrada: ${entrada}, Salida: ${salida}, Horas trabajadas: ${diferenciaHoras}`);
 
     return diferenciaHoras > 0 ? diferenciaHoras : 0;
   };
 
-  // Obtener datos de servicio y calcular horas trabajadas
+  // Obtener datos de la colección "servicio" y calcular las horas trabajadas
   useEffect(() => {
     const fetchServicio = async () => {
       setLoading(true);
 
       try {
-        // Obtener todos los registros de la colección
+        // Obtener todos los registros de la colección "servicio"
         const servicioQuery = query(collection(db, 'servicio'));
         const servicioSnapshot = await getDocs(servicioQuery);
 
+        // Mapear los documentos obtenidos de Firestore
         const servicioData = await Promise.all(
           servicioSnapshot.docs.map(async (docSnap) => {
             const data = docSnap.data();
 
-            // Buscar asistencias por correo 
+            // Buscar asistencias filtrando por el correo del usuario
             const asistenciaQuery = query(
-              collection(db, 'asistencia'), 
+              collection(db, 'asistencia'),
               where('correo', '==', data.correo)
             );
 
             const asistenciaSnapshot = await getDocs(asistenciaQuery);
 
-            // Calcular horas trabajadas
+            // Calcular horas trabajadas a partir de los registros de asistencia
             let horasActuales = 0;
             const registrosPorFecha = {};
 
@@ -65,7 +71,7 @@ export const Tablasist = () => {
               const tipo = asistData.tipo;
               const hora = asistData.hora;
 
-              console.log(`Registro de asistencia:`, asistData); 
+              console.log(`Registro de asistencia:`, asistData);
 
               if (!registrosPorFecha[fecha]) {
                 registrosPorFecha[fecha] = { entrada: null, salida: null };
@@ -78,7 +84,7 @@ export const Tablasist = () => {
               }
             });
 
-            // Sumar horas trabajadas por día
+            // Sumar las horas trabajadas por día
             for (const fecha in registrosPorFecha) {
               const { entrada, salida } = registrosPorFecha[fecha];
               if (entrada && salida) {
@@ -105,18 +111,21 @@ export const Tablasist = () => {
     };
 
     fetchServicio();
-  }, []); // Sin dependencias, se ejecuta solo una vez al montar el componente
+  }, []); // Se ejecuta solo una vez al montar el componente
 
+  // Función para eliminar un servicio de Firestore
   const handleDelete = async (id) => {
     await deleteDoc(doc(db, 'servicio', id));
     setServicio(servicio.filter((serv) => serv.id !== id));
   };
 
+  // Filtrar los servicios con base en el término de búsqueda
   const filteredServicio = servicio.filter((serv) =>
     serv.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
     serv.horas.toString().includes(searchTerm)
   );
 
+  // Manejo de la paginación
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredServicio.slice(indexOfFirstItem, indexOfLastItem);
@@ -128,6 +137,7 @@ export const Tablasist = () => {
       <Cabe /> {/* Muestra el componente de cabecera */}
       <div className="p-6">
         <div className="flex flex-wrap justify-center items-center gap-4 mb-6">
+          {/* Campo de búsqueda */}
           <input
             type="text"
             placeholder="Buscar por nombre u Horas..."
@@ -135,6 +145,7 @@ export const Tablasist = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full max-w-md px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
           />
+          {/* Botón para agregar un nuevo integrante */}
           <button
             onClick={handleButtonClick}
             className="bg-blue-500 text-white py-2 px-6 rounded-md hover:bg-blue-600 focus:outline-none transition-colors duration-300"
@@ -143,6 +154,7 @@ export const Tablasist = () => {
           </button>
         </div>
 
+        {/* Mostrar mensaje de carga o la tabla de datos */}
         {loading ? (
           <div className="text-center text-gray-700 font-semibold">Cargando datos...</div>
         ) : (
@@ -184,6 +196,7 @@ export const Tablasist = () => {
                           <span className="text-yellow-600">{estatus}</span>
                         )}
                       </td>
+                      {/* Botón para eliminar un servicio */}
                       <td className="px-4 py-2 text-center">
                         <button
                           onClick={() => handleDelete(servicio.id)}
@@ -198,23 +211,6 @@ export const Tablasist = () => {
             </table>
           </div>
         )}
-
-        {/* PAGINACIÓN */}
-        <div className="flex justify-center mt-6 space-x-2">
-          {[...Array(Math.ceil(filteredServicio.length / itemsPerPage))].map((_, index) => (
-            <button
-              key={index}
-              onClick={() => paginate(index + 1)}
-              className={`px-3 py-1 rounded-md focus:outline-none ${
-                currentPage === index + 1
-                  ? 'bg-blue-700 text-white'
-                  : 'bg-blue-500 text-white hover:bg-blue-600'
-              }`}
-            >
-              {index + 1}
-            </button>
-          ))}
-        </div>
       </div>
     </div>
   );

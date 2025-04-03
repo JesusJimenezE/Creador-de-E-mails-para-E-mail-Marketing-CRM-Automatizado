@@ -5,22 +5,24 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { Cabe } from './../../components/Cabe'; // Importa el componente de cabecera.
 
 export const Asiste = () => {
-  const [servicios, setServicios] = useState([]);
-  const [userEmail, setUserEmail] = useState(null);
-  const [hasEntrada, setHasEntrada] = useState(false);
-  const [hasSalida, setHasSalida] = useState(false);
-  const [horasTrabajadasHoy, setHorasTrabajadasHoy] = useState(0);
-  const [horasTrabajadasTotales, setHorasTrabajadasTotales] = useState(0);
+  // Estados para almacenar los datos necesarios
+  const [servicios, setServicios] = useState([]); // Lista de servicios del usuario
+  const [userEmail, setUserEmail] = useState(null); // Correo del usuario autenticado
+  const [hasEntrada, setHasEntrada] = useState(false); // Indica si ya se marcó la entrada hoy
+  const [hasSalida, setHasSalida] = useState(false); // Indica si ya se marcó la salida hoy
+  const [horasTrabajadasHoy, setHorasTrabajadasHoy] = useState(0); // Horas trabajadas en el día
+  const [horasTrabajadasTotales, setHorasTrabajadasTotales] = useState(0); // Total de horas trabajadas
 
   // Escuchar el estado de autenticación
   useEffect(() => {
     const auth = getAuth();
 
+    // Detecta cambios en el usuario autenticado
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUserEmail(user.email);
-        checkAsistencia(user.email);
-        calcularHorasTrabajadasTotales(user.email);
+        checkAsistencia(user.email); // Verifica si el usuario ya marcó entrada/salida hoy
+        calcularHorasTrabajadasTotales(user.email); // Calcula todas las horas trabajadas
       } else {
         setUserEmail(null);
       }
@@ -39,6 +41,7 @@ export const Asiste = () => {
           ...doc.data()
         }));
 
+        // Filtrar los servicios que correspondan al usuario autenticado
         const serviciosFiltrados = servicioData.filter(
           (servicio) => servicio.correo === userEmail
         );
@@ -77,6 +80,7 @@ export const Asiste = () => {
       setHasEntrada(!!entrada);
       setHasSalida(!!salida);
 
+      // Si ya hay una entrada y salida, calcular la diferencia de horas
       if (entrada && salida) {
         const horasTrabajadas = calcularDiferenciaHoras(entrada, salida);
         setHorasTrabajadasHoy(horasTrabajadas);
@@ -96,6 +100,7 @@ export const Asiste = () => {
     const todayString = today.toISOString().split('T')[0];
     const horaActual = today.toTimeString().split(' ')[0]; // Solo HH:MM:SS
 
+    // Validaciones para evitar registros incorrectos
     if (tipo === 'entrada' && hasEntrada) {
       alert('Ya has marcado entrada hoy.');
       return;
@@ -112,7 +117,7 @@ export const Asiste = () => {
     }
 
     try {
-      // Registrar la asistencia (entrada o salida)
+      // Registrar la asistencia en la base de datos
       await addDoc(collection(db, 'asistencia'), {
         correo: userEmail,
         fecha: todayString,
@@ -123,12 +128,8 @@ export const Asiste = () => {
       alert(`${tipo.charAt(0).toUpperCase() + tipo.slice(1)} registrada correctamente.`);
 
       if (tipo === 'salida') {
-        // Revisa la asistencia para obtener los horarios actualizados
         await checkAsistencia(userEmail);
-
-        // Recalcula todas las horas trabajadas después de marcar salida
         await calcularHorasTrabajadasTotales(userEmail);
-
         const horasRestadas = horasTrabajadasHoy;
 
         // Actualiza las horas del servicio correspondiente
@@ -138,113 +139,9 @@ export const Asiste = () => {
         }
       }
 
-      // Refresca los estados de entrada/salida
       checkAsistencia(userEmail);
     } catch (error) {
       console.error('Error al registrar asistencia:', error);
-    }
-  };
-
-  // Calcula la diferencia de horas entre entrada y salida
-  const calcularDiferenciaHoras = (entrada, salida) => {
-    const [hEntrada, mEntrada, sEntrada] = entrada.split(':').map(Number);
-    const [hSalida, mSalida, sSalida] = salida.split(':').map(Number);
-
-    const fechaEntrada = new Date();
-    fechaEntrada.setHours(hEntrada, mEntrada, sEntrada);
-
-    const fechaSalida = new Date();
-    fechaSalida.setHours(hSalida, mSalida, sSalida);
-
-    const diferenciaMs = fechaSalida - fechaEntrada;
-    const diferenciaHoras = diferenciaMs / 1000 / 60 / 60;
-
-    return diferenciaHoras > 0 ? diferenciaHoras : 0;
-  };
-
-  // Calcula las horas trabajadas totales de todas las asistencias
-  const calcularHorasTrabajadasTotales = async (email) => {
-    try {
-      const q = query(
-        collection(db, 'asistencia'),
-        where('correo', '==', email)
-      );
-      const querySnapshot = await getDocs(q);
-
-      const registros = [];
-
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        registros.push({
-          fecha: data.fecha,
-          hora: data.hora,
-          tipo: data.tipo
-        });
-      });
-
-      // Agrupar por fecha
-      const registrosPorFecha = {};
-      registros.forEach((registro) => {
-        if (!registrosPorFecha[registro.fecha]) {
-          registrosPorFecha[registro.fecha] = { entrada: null, salida: null };
-        }
-        if (registro.tipo === 'entrada') {
-          registrosPorFecha[registro.fecha].entrada = registro.hora;
-        }
-        if (registro.tipo === 'salida') {
-          registrosPorFecha[registro.fecha].salida = registro.hora;
-        }
-      });
-
-      // Calcular las horas trabajadas en cada día
-      let sumaHoras = 0;
-      for (const fecha in registrosPorFecha) {
-        const { entrada, salida } = registrosPorFecha[fecha];
-        if (entrada && salida) {
-          const horasDia = calcularDiferenciaHoras(entrada, salida);
-          sumaHoras += horasDia;
-        }
-      }
-
-      setHorasTrabajadasTotales(sumaHoras);
-      console.log(`Horas trabajadas totales: ${sumaHoras} hrs`);
-    } catch (error) {
-      console.error('Error al calcular las horas trabajadas totales:', error);
-    }
-  };
-
-  // Actualiza las horas restantes en el servicio
-  const actualizarHorasServicio = async (idServicio, horasRestadas) => {
-    try {
-      const servicioRef = doc(db, 'servicio', idServicio);
-
-      const servicioActual = servicios.find(
-        (servicio) => servicio.id === idServicio
-      );
-
-      if (!servicioActual) {
-        console.error('Servicio no encontrado');
-        return;
-      }
-
-      const horasActuales = parseFloat(servicioActual.horas) || 0;
-      const nuevasHoras = horasActuales - horasRestadas;
-
-      await updateDoc(servicioRef, {
-        horas: nuevasHoras.toFixed(2)
-      });
-
-      console.log(`Horas actualizadas a ${nuevasHoras} hrs`);
-
-      setServicios((prevServicios) =>
-        prevServicios.map((servicio) =>
-          servicio.id === idServicio
-            ? { ...servicio, horas: nuevasHoras }
-            : servicio
-        )
-      );
-    } catch (error) {
-      console.error('Error al actualizar horas del servicio:', error);
     }
   };
 
@@ -310,10 +207,11 @@ export const Asiste = () => {
           </table>
         </div>
 
+        {/* Botones para marcar entrada y salida */}
         <div className="flex justify-center mt-4">
           <button
             onClick={() => marcarAsistencia('entrada')}
-            className={`bg-green-500 text-white font-semibold py-3 px-8 rounded-lg mx-2 hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-300 transition ${
+            className={`bg-green-500 text-white font-semibold py-3 px-8 rounded-lg mx-2 hover:bg-green-600 transition ${
               hasEntrada ? 'opacity-50 cursor-not-allowed' : ''
             }`}
             disabled={hasEntrada}>
@@ -321,7 +219,7 @@ export const Asiste = () => {
           </button>
           <button
             onClick={() => marcarAsistencia('salida')}
-            className={`bg-blue-500 text-white py-3 px-8 rounded-lg mx-2 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300 transition ${
+            className={`bg-blue-500 text-white py-3 px-8 rounded-lg mx-2 hover:bg-blue-600 transition ${
               !hasEntrada || hasSalida ? 'opacity-50 cursor-not-allowed' : ''
             }`}
             disabled={!hasEntrada || hasSalida}>

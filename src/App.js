@@ -37,10 +37,11 @@ function App() { // Define el componente App
           <div className="App"> {/* Contenedor principal de la aplicación */}
             {/* Imagen superior de la cabecera */}
             <img src={inicabe} alt="Parte de arriba" className="header-image" />
-            <div>
+            <div className="flex justify-center">
               {/* Logo de DENEDIG */}
               <img src={DENEDIG} alt="Logo" className="logo-image" />
             </div>
+
             {/* Mensajes de bienvenida */}
             <div>"Bienvenido a la plataforma de E-mails"</div>
             <div>"DENEDIG SAD de CV"</div>
